@@ -261,16 +261,6 @@ const MobileHousingDashboard = () => {
 
         <div className="space-y-6">
           <div className="text-center">
-            {filteredData.length > 0 && (
-              <p className="text-xl text-gray-700 mb-8">
-                In <span className="font-bold">{selectedLocation}</span>, a typical family buying a typical home would spend{' '}
-                <span className="font-bold" style={{ color: getLineColor() }}>
-                  {filteredData[filteredData.length - 1].ratio.toFixed(1)}%
-                </span>{' '}
-                of their monthly income on the mortgage
-              </p>
-            )}
-
             <span className={`font-bold text-gray-800 ${isMobile ? 'text-8xl' : 'text-4xl'}`}>
               {score}
             </span>
@@ -295,6 +285,16 @@ const MobileHousingDashboard = () => {
             </div>
           </div>
         </div>
+
+        {filteredData.length > 0 && (
+          <p className={`text-center my-8 ${isMobile ? 'text-3xl' : 'text-xl'} text-gray-700`}>
+            In <span className="font-bold">{selectedLocation}</span>, a typical family buying a typical home would spend{' '}
+            <span className="font-bold" style={{ color: getLineColor() }}>
+              {filteredData[filteredData.length - 1].ratio.toFixed(1)}%
+            </span>{' '}
+            of their monthly income on the mortgage
+          </p>
+        )}
 
         <div className="mt-12 w-full mx-auto max-w-6xl h-[800px] md:h-[500px]">
           <ResponsiveContainer width="100%" height="100%">
