@@ -202,39 +202,39 @@ const MobileHousingDashboard = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-4 mb-8">
           {/* Location Card */}
           <div
-            className="bg-gray-100 rounded-xl p-8 flex items-center relative overflow-hidden"
+            className="bg-gray-100 rounded-xl md:rounded-lg p-8 md:p-6 flex items-center relative overflow-hidden"
             style={{
               border: `4px solid ${outlineColor}`,
               transition: 'border-color 0.5s ease',
             }}
           >
-            <MapPin size={64} className="mr-6 text-gray-600" />
+            <MapPin size={64} className="mr-6 text-gray-600 md:w-12 md:h-12" />
             <div className="flex-1">
               <h3 className="text-lg font-semibold mb-2">Current Location</h3>
-              <p className="text-5xl truncate">{selectedLocation}</p>
+              <p className="text-5xl md:text-2xl truncate">{selectedLocation}</p>
             </div>
           </div>
 
           {/* Income Card */}
-          <div className="bg-gray-100 rounded-xl p-8 flex items-center">
-            <DollarSign size={64} className="mr-6 text-gray-600" />
+          <div className="bg-gray-100 rounded-xl md:rounded-lg p-8 md:p-6 flex items-center">
+            <DollarSign size={64} className="mr-6 text-gray-600 md:w-12 md:h-12" />
             <div className="flex-1">
               <h3 className="text-lg font-semibold mb-2">{currentYear} Median HHI</h3>
-              <p className="text-5xl">
+              <p className="text-5xl md:text-2xl">
                 ${(Math.round(currentMedianHHI / 1000) * 1000).toLocaleString()}
               </p>
             </div>
           </div>
 
           {/* Price Card */}
-          <div className="bg-gray-100 rounded-xl p-8 flex items-center">
-            <Home size={64} className="mr-6 text-gray-600" />
+          <div className="bg-gray-100 rounded-xl md:rounded-lg p-8 md:p-6 flex items-center">
+            <Home size={64} className="mr-6 text-gray-600 md:w-12 md:h-12" />
             <div className="flex-1">
               <h3 className="text-lg font-semibold mb-2">{currentYear} Median Price</h3>
-              <p className="text-5xl">
+              <p className="text-5xl md:text-2xl">
                 ${(Math.round(currentListingPrice / 1000) * 1000).toLocaleString()}
               </p>
             </div>
