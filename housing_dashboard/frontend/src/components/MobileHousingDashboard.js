@@ -3,13 +3,13 @@ import Papa from 'papaparse';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Search, MapPin, DollarSign, Home, X } from 'lucide-react';
 
-function Header({ isMobile }) {
+function Header() {
   return (
     <div className="w-full h-auto overflow-hidden">
       <img 
         src="/quantnomics.png"
         alt="Quantnomics Header"
-        className={`w-full ${isMobile ? 'max-h-[400px]' : 'max-h-[200px]'} object-contain`}
+        className="w-full max-h-[200px] md:max-h-[400px] object-contain"
       />
     </div>
   );
@@ -20,23 +20,8 @@ const MobileHousingDashboard = () => {
   const [selectedLocation, setSelectedLocation] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [locations, setLocations] = useState([]);
-  const [isMobile, setIsMobile] = useState(true);  // Force mobile layout for testing
   const [outlineColor, setOutlineColor] = useState('#FFD700');
   const [showDropdown, setShowDropdown] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      console.log('Current width:', width);
-      setIsMobile(width <= 768);
-    };
-
-    // Initial check
-    handleResize();
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   useEffect(() => {
     const loadData = async () => {
@@ -134,9 +119,7 @@ const MobileHousingDashboard = () => {
 
   const Section = ({ title, isExpanded, children }) => (
     <div className="mb-6 bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-      <div
-        className={`w-full p-4 text-gray-800 bg-gray-100 ${isMobile ? 'text-2xl' : 'text-xl'}`}
-      >
+      <div className="w-full p-4 text-gray-800 bg-gray-100 text-xl md:text-2xl">
         <span className="font-bold">{title}</span>
       </div>
       {isExpanded && <div className="p-4">{children}</div>}
@@ -156,11 +139,11 @@ const MobileHousingDashboard = () => {
 
   return (
     <div className="min-h-screen bg-white text-gray-800">
-      <Header isMobile={isMobile} />
+      <Header />
       <div className="p-4 md:max-w-7xl md:mx-auto md:px-8">
         <div className="relative mb-6">
           <div className="flex items-center bg-gray-100 rounded-lg border border-gray-200 h-16 relative">
-            <Search size={isMobile ? 48 : 24} className="ml-4 text-gray-600" />
+            <Search size={24} className="ml-4 text-gray-600 md:w-12 md:h-12" />
             <input
               type="text"
               placeholder="Search locations"
@@ -170,12 +153,12 @@ const MobileHousingDashboard = () => {
                 setShowDropdown(true);
               }}
               onFocus={() => setShowDropdown(true)}
-              className={`w-full p-4 bg-transparent focus:outline-none ${isMobile ? 'text-3xl' : 'text-base'}`}
+              className="w-full p-4 bg-transparent focus:outline-none text-base md:text-xl"
             />
             {searchTerm && (
               <X
-                size={isMobile ? 48 : 24}
-                className="mr-4 text-gray-600 cursor-pointer"
+                size={24}
+                className="mr-4 text-gray-600 cursor-pointer md:w-12 md:h-12"
                 onClick={() => {
                   setSearchTerm('');
                   setShowDropdown(false);
@@ -194,7 +177,7 @@ const MobileHousingDashboard = () => {
                       setShowDropdown(false);
                     }}
                   >
-                    <p className={`${isMobile ? 'text-3xl' : 'text-base'}`}>{location}</p>
+                    <p className="text-base md:text-xl">{location}</p>
                   </div>
                 ))}
               </div>
@@ -202,7 +185,7 @@ const MobileHousingDashboard = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {/* Location Card */}
           <div
             className="bg-gray-100 rounded-xl p-8 flex items-center relative overflow-hidden"
@@ -214,13 +197,7 @@ const MobileHousingDashboard = () => {
             <MapPin size={64} className="mr-6 text-gray-600" />
             <div className="flex-1">
               <h3 className="text-lg font-semibold mb-2">Current Location</h3>
-              <p className={`${isMobile ? 
-                (selectedLocation.length > 20 
-                  ? 'text-3xl' 
-                  : selectedLocation.length > 15 
-                    ? 'text-4xl' 
-                    : 'text-5xl') 
-                : 'text-2xl'} truncate font-semibold`}>{selectedLocation}</p>
+              <p className="text-2xl md:text-4xl truncate font-semibold">{selectedLocation}</p>
             </div>
           </div>
 
@@ -229,7 +206,7 @@ const MobileHousingDashboard = () => {
             <DollarSign size={64} className="mr-6 text-gray-600" />
             <div className="flex-1">
               <h3 className="text-lg font-semibold mb-2">{currentYear} Median HHI</h3>
-              <p className="text-5xl">
+              <p className="text-4xl md:text-5xl">
                 ${(Math.round(currentMedianHHI / 1000) * 1000).toLocaleString()}
               </p>
             </div>
@@ -240,40 +217,22 @@ const MobileHousingDashboard = () => {
             <Home size={64} className="mr-6 text-gray-600" />
             <div className="flex-1">
               <h3 className="text-lg font-semibold mb-2">{currentYear} Median List Price</h3>
-              <p className="text-5xl">
+              <p className="text-4xl md:text-5xl">
                 ${(Math.round(currentListingPrice / 1000) * 1000).toLocaleString()}
               </p>
             </div>
           </div>
         </div>
 
-        <style jsx global>{`
-          @media (min-width: 768px) {
-            .grid {
-              grid-template-columns: repeat(3, 1fr) !important;
-            }
-            .grid > div {
-              padding: 1.5rem !important;
-            }
-            .grid p {
-              font-size: 1.5rem !important;
-            }
-            .grid svg {
-              width: 48px !important;
-              height: 48px !important;
-            }
-          }
-        `}</style>
-
         <div className="space-y-6">
           <div className="text-center">
-            <span className={`font-bold text-gray-800 ${isMobile ? 'text-8xl' : 'text-4xl'}`}>
+            <span className="font-bold text-gray-800 text-4xl md:text-8xl">
               {score}
             </span>
-            <span className={`font-bold text-gray-500 ${isMobile ? 'text-6xl' : 'text-2xl'}`}>
+            <span className="font-bold text-gray-500 text-2xl md:text-6xl">
               {' '}/ 10
             </span>
-            <p className={`text-gray-600 mt-4 ${isMobile ? 'text-4xl' : 'text-xl'}`}>
+            <p className="text-gray-600 mt-4 text-xl md:text-4xl">
               {score >= 9 ? 'Highly Affordable' :
                score >= 7 ? 'Affordable' :
                score >= 5 ? 'Somewhat Affordable' :
@@ -293,7 +252,7 @@ const MobileHousingDashboard = () => {
         </div>
 
         {filteredData.length > 0 && (
-          <p className={`text-center my-8 ${isMobile ? 'text-3xl' : 'text-xl'} text-gray-700`}>
+          <p className="text-center my-8 text-xl md:text-3xl text-gray-700">
             In <span className="font-bold">{selectedLocation}</span>, a typical family buying a typical home would spend{' '}
             <span className="font-bold" style={{ color: getLineColor() }}>
               {filteredData[filteredData.length - 1].ratio.toFixed(1)}%
@@ -302,7 +261,7 @@ const MobileHousingDashboard = () => {
           </p>
         )}
 
-        <div className="mt-12 w-full mx-auto max-w-6xl h-[800px] md:h-[500px]">
+        <div className="mt-12 w-full mx-auto max-w-6xl h-[500px] md:h-[800px]">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={filteredData}
@@ -312,7 +271,7 @@ const MobileHousingDashboard = () => {
               <XAxis
                 dataKey="date"
                 stroke="#000"
-                tick={{ fill: '#000', fontSize: isMobile ? 28 : 20 }}
+                tick={{ fill: '#000', fontSize: 20 }}
                 tickFormatter={(value) => {
                   const date = new Date(value);
                   return date.getFullYear();
@@ -321,22 +280,22 @@ const MobileHousingDashboard = () => {
               />
               <YAxis
                 stroke="#000"
-                tick={{ fill: '#000', fontSize: isMobile ? 28 : 20 }}
+                tick={{ fill: '#000', fontSize: 20 }}
                 label={{
                   value: 'Mortgage Cost Burden (%)',
                   angle: -90,
                   position: 'insideLeft',
                   fill: '#000',
-                  fontSize: isMobile ? 28 : 20,
+                  fontSize: 20,
                   dx: -20,
-                  dy: isMobile ? 250 : 150
+                  dy: 150
                 }}
                 domain={affordabilityRange}
                 tickCount={5}
                 tickFormatter={(value) => value.toFixed(0)}
               />
               <Tooltip
-                contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', fontSize: isMobile ? 20 : 12 }}
+                contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', fontSize: 12 }}
                 labelStyle={{ color: '#000' }}
               />
               <Line
@@ -350,10 +309,10 @@ const MobileHousingDashboard = () => {
           </ResponsiveContainer>
         </div>
         <div className="text-right space-y-1">
-          <p className={`${isMobile ? 'text-2xl' : 'text-sm'} text-gray-500 italic`}>
+          <p className="text-sm md:text-2xl text-gray-500 italic">
             * Excludes property taxes, insurance, and other housing costs
           </p>
-          <p className={`${isMobile ? 'text-2xl' : 'text-sm'} text-gray-500`}>
+          <p className="text-sm md:text-2xl text-gray-500">
             Source: FRED, US Census Bureau
           </p>
         </div>
