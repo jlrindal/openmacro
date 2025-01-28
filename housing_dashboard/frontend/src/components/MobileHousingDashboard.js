@@ -7,7 +7,7 @@ function Header() {
   return (
     <div className="w-full h-auto overflow-hidden">
       <img 
-        src={process.env.PUBLIC_URL + '/quantnomics.jpg'}
+        src={process.env.PUBLIC_URL + '/quantnomics.png'}
         alt="Quantnomics Header"
         className="w-full max-h-[400px] object-contain" // Changed these classes
       />
