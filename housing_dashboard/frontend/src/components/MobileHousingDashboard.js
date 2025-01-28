@@ -214,7 +214,13 @@ const MobileHousingDashboard = () => {
             <MapPin size={64} className="mr-6 text-gray-600" />
             <div className="flex-1">
               <h3 className="text-lg font-semibold mb-2">Current Location</h3>
-              <p className="text-5xl truncate">{selectedLocation}</p>
+              <p className={`${
+                selectedLocation.length > 15 
+                  ? 'text-3xl' 
+                  : selectedLocation.length > 10 
+                    ? 'text-4xl' 
+                    : 'text-5xl'
+              } truncate`}>{selectedLocation}</p>
             </div>
           </div>
 
@@ -233,7 +239,7 @@ const MobileHousingDashboard = () => {
           <div className="bg-gray-100 rounded-xl p-8 flex items-center">
             <Home size={64} className="mr-6 text-gray-600" />
             <div className="flex-1">
-              <h3 className="text-lg font-semibold mb-2">{currentYear} Median Price</h3>
+              <h3 className="text-lg font-semibold mb-2">{currentYear} Median List Price</h3>
               <p className="text-5xl">
                 ${(Math.round(currentListingPrice / 1000) * 1000).toLocaleString()}
               </p>
