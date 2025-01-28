@@ -112,15 +112,6 @@ const MobileHousingDashboard = () => {
     return '#dc2626';
   };
 
-  const Section = ({ title, isExpanded, children }) => (
-    <div className="mb-6 bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-      <div className="w-full p-4 text-gray-800 bg-gray-100 text-xl md:text-2xl">
-        <span className="font-bold">{title}</span>
-      </div>
-      {isExpanded && <div className="p-4">{children}</div>}
-    </div>
-  );
-
   const latestDataPoint = filteredData.length > 0
     ? filteredData[filteredData.length - 1]
     : null;
@@ -136,115 +127,120 @@ const MobileHousingDashboard = () => {
     <div className="min-h-screen bg-white text-gray-800">
       <Header />
       <div className="p-4 md:max-w-6xl md:mx-auto md:px-8">
-        <div className="relative mb-6">
-          <div className="flex items-center bg-gray-100 rounded-lg border border-gray-200 h-16 relative">
-            <Search size={24} className="ml-4 text-gray-600 md:w-8 md:h-8" />
-            <input
-              type="text"
-              placeholder="Search locations"
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setShowDropdown(true);
-              }}
-              onFocus={() => setShowDropdown(true)}
-              className="w-full p-4 bg-transparent focus:outline-none text-base md:text-lg"
-            />
-            {searchTerm && (
-              <X
-                size={24}
-                className="mr-4 text-gray-600 cursor-pointer md:w-8 md:h-8"
-                onClick={() => {
-                  setSearchTerm('');
-                  setShowDropdown(false);
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="relative">
+            <div className="flex items-center bg-gray-100 rounded-lg border border-gray-200 h-16 relative">
+              <Search size={24} className="ml-4 text-gray-600 md:w-8 md:h-8" />
+              <input
+                type="text"
+                placeholder="Search locations"
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setShowDropdown(true);
                 }}
+                onFocus={() => setShowDropdown(true)}
+                className="w-full p-4 bg-transparent focus:outline-none text-base md:text-lg"
               />
-            )}
-            {showDropdown && (
-              <div className="absolute top-full left-0 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-1 z-10 max-h-48 overflow-y-auto">
-                {filteredLocations.map((location, index) => (
-                  <div
-                    key={index}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => {
-                      setSelectedLocation(location);
-                      setSearchTerm(location);
-                      setShowDropdown(false);
-                    }}
-                  >
-                    <p className="text-base md:text-lg">{location}</p>
-                  </div>
-                ))}
-              </div>
-            )}
+              {searchTerm && (
+                <X
+                  size={24}
+                  className="mr-4 text-gray-600 cursor-pointer md:w-8 md:h-8"
+                  onClick={() => {
+                    setSearchTerm('');
+                    setShowDropdown(false);
+                  }}
+                />
+              )}
+              {showDropdown && (
+                <div className="absolute top-full left-0 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-1 z-10 max-h-48 overflow-y-auto">
+                  {filteredLocations.map((location, index) => (
+                    <div
+                      key={index}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => {
+                        setSelectedLocation(location);
+                        setSearchTerm(location);
+                        setShowDropdown(false);
+                      }}
+                    >
+                      <p className="text-base md:text-lg">{location}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div
-            className="bg-gray-100 rounded-xl p-8 flex items-center relative overflow-hidden"
+            className="bg-gray-100 rounded-xl p-6 flex items-center relative overflow-hidden h-16"
             style={{
               border: `4px solid ${outlineColor}`,
               transition: 'border-color 0.5s ease',
             }}
           >
-            <MapPin size={48} className="mr-6 text-gray-600" />
+            <MapPin size={32} className="mr-4 text-gray-600" />
             <div className="flex-1">
-              <h3 className="text-lg font-semibold mb-2">Current Location</h3>
-              <p className="text-2xl md:text-3xl truncate font-semibold">{selectedLocation}</p>
-            </div>
-          </div>
-
-          <div className="bg-gray-100 rounded-xl p-8 flex items-center">
-            <DollarSign size={48} className="mr-6 text-gray-600" />
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold mb-2">{currentYear} Median HHI</h3>
-              <p className="text-4xl md:text-3xl">
-                ${(Math.round(currentMedianHHI / 1000) * 1000).toLocaleString()}
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-gray-100 rounded-xl p-8 flex items-center">
-            <Home size={48} className="mr-6 text-gray-600" />
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold mb-2">{currentYear} Median List Price</h3>
-              <p className="text-4xl md:text-3xl">
-                ${(Math.round(currentListingPrice / 1000) * 1000).toLocaleString()}
-              </p>
+              <p className="text-lg md:text-xl truncate font-semibold">{selectedLocation}</p>
             </div>
           </div>
         </div>
 
-        <div className="space-y-6">
-          <div className="text-center">
-            <span className="font-bold text-gray-800 text-4xl md:text-6xl">
-              {score}
-            </span>
-            <span className="font-bold text-gray-500 text-2xl md:text-4xl">
-              {' '}/ 10
-            </span>
-            <p className="text-gray-600 mt-4 text-xl md:text-2xl">
-              {score >= 9 ? 'Highly Affordable' :
-               score >= 7 ? 'Affordable' :
-               score >= 5 ? 'Somewhat Affordable' :
-               score >= 3 ? 'Low Affordability' :
-               'Very Low Affordability'}
-            </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gray-100 rounded-xl p-6 flex items-center">
+              <DollarSign size={48} className="mr-6 text-gray-600" />
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold mb-2">{currentYear} Median HHI</h3>
+                <p className="text-4xl md:text-3xl">
+                  ${(Math.round(currentMedianHHI / 1000) * 1000).toLocaleString()}
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-gray-100 rounded-xl p-6 flex items-center">
+              <Home size={48} className="mr-6 text-gray-600" />
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold mb-2">{currentYear} Median List Price</h3>
+                <p className="text-4xl md:text-3xl">
+                  ${(Math.round(currentListingPrice / 1000) * 1000).toLocaleString()}
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className="flex justify-center">
-            <div className="w-full max-w-md bg-gray-200 rounded-full h-8 overflow-hidden">
-              <div
-                className={`h-full ${getScoreColor(score)} transition-all duration-500`}
-                style={{ width: `${(score / 10) * 100}%` }}
-              />
+          <div className="md:col-span-1">
+            <div className="bg-gray-100 rounded-xl p-6">
+              <div className="text-center">
+                <span className="font-bold text-gray-800 text-4xl md:text-5xl">
+                  {score}
+                </span>
+                <span className="font-bold text-gray-500 text-2xl md:text-3xl">
+                  {' '}/ 10
+                </span>
+                <p className="text-gray-600 mt-2 text-xl md:text-lg">
+                  {score >= 9 ? 'Highly Affordable' :
+                   score >= 7 ? 'Affordable' :
+                   score >= 5 ? 'Somewhat Affordable' :
+                   score >= 3 ? 'Low Affordability' :
+                   'Very Low Affordability'}
+                </p>
+              </div>
+
+              <div className="mt-4">
+                <div className="w-full bg-gray-200 rounded-full h-6 overflow-hidden">
+                  <div
+                    className={`h-full ${getScoreColor(score)} transition-all duration-500`}
+                    style={{ width: `${(score / 10) * 100}%` }}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         {filteredData.length > 0 && (
-          <p className="text-center my-8 text-xl md:text-2xl text-gray-700">
+          <p className="text-center my-6 text-xl md:text-2xl text-gray-700">
             In <span className="font-bold">{selectedLocation}</span>, a typical family buying a typical home would spend{' '}
             <span className="font-bold" style={{ color: getLineColor() }}>
               {filteredData[filteredData.length - 1].ratio.toFixed(1)}%
@@ -253,7 +249,7 @@ const MobileHousingDashboard = () => {
           </p>
         )}
 
-        <div className="mt-12 w-full mx-auto max-w-6xl h-[500px] md:h-[600px]">
+        <div className="mt-8 w-full mx-auto max-w-6xl h-[500px] md:h-[600px]">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={filteredData}
