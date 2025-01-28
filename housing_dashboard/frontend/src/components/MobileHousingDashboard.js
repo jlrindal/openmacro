@@ -241,7 +241,7 @@ const MobileHousingDashboard = () => {
 
         {filteredData.length > 0 && (
           <p className="text-center my-6 text-xl md:text-2xl text-gray-700">
-            In <span className="font-bold">{selectedLocation}</span>,'s Metro Area, a typical family buying a typical home would have to spend{' '}
+            In <span className="font-bold">{selectedLocation}</span>'s Metro Area, a typical family buying a typical home would have to spend{' '}
             <span className="font-bold" style={{ color: getLineColor() }}>
               {filteredData[filteredData.length - 1].ratio.toFixed(1)}%
             </span>{' '}
