@@ -7,7 +7,7 @@ function Header({ isMobile }) {
   return (
     <div className="w-full h-auto overflow-hidden">
       <img 
-        src={process.env.PUBLIC_URL + '/quantnomics.png'}
+        src="/quantnomics.png"
         alt="Quantnomics Header"
         className={`w-full ${isMobile ? 'max-h-[400px]' : 'max-h-[200px]'} object-contain`}
       />
@@ -207,7 +207,7 @@ const MobileHousingDashboard = () => {
           >
             <MapPin size={isMobile ? 64 : 48} className="mr-6 text-gray-600" />
             <div>
-              <h3 className={`font-semibold ${isMobile ? 'text-4xl' : 'text-xl'}`}>Current Location</h3>
+              <h3 className="font-semibold text-lg">Current Location</h3>
               <p className={`${isMobile ? 'text-5xl' : 'text-2xl'}`}>{selectedLocation}</p>
             </div>
           </div>
@@ -215,7 +215,7 @@ const MobileHousingDashboard = () => {
           <div className="bg-gray-100 rounded-lg p-6 flex items-center">
             <DollarSign size={isMobile ? 64 : 48} className="mr-6 text-gray-600" />
             <div>
-              <h3 className={`font-semibold ${isMobile ? 'text-4xl' : 'text-xl'}`}>{currentYear} Median HHI</h3>
+              <h3 className="font-semibold text-lg">{currentYear} Median HHI</h3>
               <p className={`${isMobile ? 'text-5xl' : 'text-2xl'}`}>
                 ${(Math.round(currentMedianHHI / 1000) * 1000).toLocaleString()}
               </p>
@@ -225,7 +225,7 @@ const MobileHousingDashboard = () => {
           <div className="bg-gray-100 rounded-lg p-6 flex items-center">
             <Home size={isMobile ? 64 : 48} className="mr-6 text-gray-600" />
             <div>
-              <h3 className={`font-semibold ${isMobile ? 'text-4xl' : 'text-xl'}`}>{currentYear} Median Price</h3>
+              <h3 className="font-semibold text-lg">{currentYear} Median Price</h3>
               <p className={`${isMobile ? 'text-5xl' : 'text-2xl'}`}>
                 ${(Math.round(currentListingPrice / 1000) * 1000).toLocaleString()}
               </p>
@@ -261,7 +261,7 @@ const MobileHousingDashboard = () => {
         </div>
 
         {filteredData.length > 0 && (
-          <p className={`text-center mt-8 mb-4 ${isMobile ? 'text-3xl' : 'text-xl'} text-gray-700`}>
+          <p className="text-center mt-8 mb-4 text-xl text-gray-700">
             In <span className="font-bold">{selectedLocation}</span>, a typical family buying a typical home would spend{' '}
             <span className="font-bold" style={{ color: getLineColor() }}>
               {filteredData[filteredData.length - 1].ratio.toFixed(1)}%
