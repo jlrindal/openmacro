@@ -20,14 +20,19 @@ const MobileHousingDashboard = () => {
   const [selectedLocation, setSelectedLocation] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [locations, setLocations] = useState([]);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(true);  // Force mobile layout for testing
   const [outlineColor, setOutlineColor] = useState('#FFD700');
   const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+      const width = window.innerWidth;
+      console.log('Current width:', width);
+      setIsMobile(width <= 768);
     };
+
+    // Initial check
+    handleResize();
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -197,7 +202,7 @@ const MobileHousingDashboard = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-3'} gap-4 mb-8`}>
           <div
             className="bg-gray-100 rounded-lg p-6 flex items-center relative overflow-hidden"
             style={{
@@ -235,6 +240,16 @@ const MobileHousingDashboard = () => {
 
         <div className="space-y-6">
           <div className="text-center">
+            {filteredData.length > 0 && (
+              <p className="text-xl text-gray-700 mb-8">
+                In <span className="font-bold">{selectedLocation}</span>, a typical family buying a typical home would spend{' '}
+                <span className="font-bold" style={{ color: getLineColor() }}>
+                  {filteredData[filteredData.length - 1].ratio.toFixed(1)}%
+                </span>{' '}
+                of their monthly income on the mortgage
+              </p>
+            )}
+
             <span className={`font-bold text-gray-800 ${isMobile ? 'text-8xl' : 'text-4xl'}`}>
               {score}
             </span>
@@ -259,16 +274,6 @@ const MobileHousingDashboard = () => {
             </div>
           </div>
         </div>
-
-        {filteredData.length > 0 && (
-          <p className="text-center mt-8 mb-4 text-xl text-gray-700">
-            In <span className="font-bold">{selectedLocation}</span>, a typical family buying a typical home would spend{' '}
-            <span className="font-bold" style={{ color: getLineColor() }}>
-              {filteredData[filteredData.length - 1].ratio.toFixed(1)}%
-            </span>{' '}
-            of their monthly income on the mortgage
-          </p>
-        )}
 
         <div className={`mt-6 w-full ${isMobile ? 'h-[800px]' : 'h-[400px]'}`}>
           <ResponsiveContainer width="100%" height="100%">
