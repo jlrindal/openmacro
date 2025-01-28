@@ -202,36 +202,39 @@ const MobileHousingDashboard = () => {
           </div>
         </div>
 
-        <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-3'} gap-4 mb-8`}>
+        <div className="grid grid-cols-1 gap-6 mb-8">
+          {/* Location Card */}
           <div
-            className="bg-gray-100 rounded-lg p-6 flex items-center relative overflow-hidden"
+            className="bg-gray-100 rounded-xl p-8 flex items-center relative overflow-hidden"
             style={{
               border: `4px solid ${outlineColor}`,
               transition: 'border-color 0.5s ease',
             }}
           >
-            <MapPin size={isMobile ? 64 : 48} className="mr-6 text-gray-600" />
-            <div>
-              <h3 className="font-semibold text-lg">Current Location</h3>
-              <p className={`${isMobile ? 'text-5xl' : 'text-2xl'}`}>{selectedLocation}</p>
+            <MapPin size={64} className="mr-6 text-gray-600" />
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold mb-2">Current Location</h3>
+              <p className="text-5xl truncate">{selectedLocation}</p>
             </div>
           </div>
 
-          <div className="bg-gray-100 rounded-lg p-6 flex items-center">
-            <DollarSign size={isMobile ? 64 : 48} className="mr-6 text-gray-600" />
-            <div>
-              <h3 className="font-semibold text-lg">{currentYear} Median HHI</h3>
-              <p className={`${isMobile ? 'text-5xl' : 'text-2xl'}`}>
+          {/* Income Card */}
+          <div className="bg-gray-100 rounded-xl p-8 flex items-center">
+            <DollarSign size={64} className="mr-6 text-gray-600" />
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold mb-2">{currentYear} Median HHI</h3>
+              <p className="text-5xl">
                 ${(Math.round(currentMedianHHI / 1000) * 1000).toLocaleString()}
               </p>
             </div>
           </div>
 
-          <div className="bg-gray-100 rounded-lg p-6 flex items-center">
-            <Home size={isMobile ? 64 : 48} className="mr-6 text-gray-600" />
-            <div>
-              <h3 className="font-semibold text-lg">{currentYear} Median Price</h3>
-              <p className={`${isMobile ? 'text-5xl' : 'text-2xl'}`}>
+          {/* Price Card */}
+          <div className="bg-gray-100 rounded-xl p-8 flex items-center">
+            <Home size={64} className="mr-6 text-gray-600" />
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold mb-2">{currentYear} Median Price</h3>
+              <p className="text-5xl">
                 ${(Math.round(currentListingPrice / 1000) * 1000).toLocaleString()}
               </p>
             </div>
