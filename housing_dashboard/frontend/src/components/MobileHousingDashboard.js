@@ -24,7 +24,7 @@ const MobileHousingDashboard = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const response = await fetch('https://quantnomics-deployment-d88ae194be04.herokuapp.com/api/data');
+        const response = await fetch('https://quantnomics-deployment-d88ae194be04.herokuapp.com/api/housing_data');
         const text = await response.text();
 
         const parsedResult = Papa.parse(text, {
