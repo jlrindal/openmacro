@@ -249,49 +249,89 @@ const MobileHousingDashboard = () => {
           </p>
         )}
 
-        <div className="mt-8 w-full mx-auto max-w-6xl h-[500px] md:h-[600px]">
+        <div className="mt-8 w-full mx-auto max-w-6xl h-[500px] md:h-[600px] bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={filteredData}
-              margin={{ left: 60, right: 30, top: 20, bottom: 50 }}
+              margin={{ left: 80, right: 50, top: 40, bottom: 60 }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <CartesianGrid 
+                strokeDasharray="3 3" 
+                stroke="#f3f4f6" 
+                vertical={false}
+              />
               <XAxis
                 dataKey="date"
-                stroke="#000"
-                tick={{ fill: '#000', fontSize: 16 }}
+                stroke="#374151"
+                tick={{ fill: '#374151', fontSize: 12, fontFamily: 'system-ui' }}
                 tickFormatter={(value) => {
                   const date = new Date(value);
                   return date.getFullYear();
                 }}
                 padding={{ left: 0, right: 0 }}
+                axisLine={{ stroke: '#e5e7eb' }}
+                tickLine={{ stroke: '#e5e7eb' }}
               />
               <YAxis
-                stroke="#000"
-                tick={{ fill: '#000', fontSize: 16 }}
+                stroke="#374151"
+                tick={{ 
+                  fill: '#374151', 
+                  fontSize: 12,
+                  fontFamily: 'system-ui',
+                  dx: -10
+                }}
                 label={{
-                  value: 'Mortgage Cost Burden (%)',
+                  value: 'Share of Monthly Income (%)',
                   angle: -90,
                   position: 'insideLeft',
-                  fill: '#000',
-                  fontSize: 16,
-                  dx: -20,
-                  dy: 100
+                  fill: '#374151',
+                  fontSize: 14,
+                  fontFamily: 'system-ui',
+                  dx: -50,
+                  dy: 120
                 }}
                 domain={affordabilityRange}
-                tickCount={5}
+                tickCount={6}
                 tickFormatter={(value) => value.toFixed(0)}
+                axisLine={{ stroke: '#e5e7eb' }}
+                tickLine={{ stroke: '#e5e7eb' }}
               />
               <Tooltip
-                contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', fontSize: 12 }}
-                labelStyle={{ color: '#000' }}
+                contentStyle={{ 
+                  backgroundColor: '#fff',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '4px',
+                  fontSize: 12,
+                  fontFamily: 'system-ui',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                  padding: '8px 12px'
+                }}
+                labelStyle={{ 
+                  color: '#374151',
+                  fontWeight: 600,
+                  marginBottom: '4px'
+                }}
+                formatter={(value) => [`${value.toFixed(1)}%`, 'Income Share']}
+                labelFormatter={(label) => {
+                  const date = new Date(label);
+                  return date.toLocaleDateString('en-US', { 
+                    year: 'numeric',
+                    month: 'long'
+                  });
+                }}
               />
               <Line
                 type="monotone"
                 dataKey="ratio"
                 stroke={getLineColor()}
-                strokeWidth={3}
-                dot={{ fill: getLineColor(), r: 3 }}
+                strokeWidth={2}
+                dot={false}
+                activeDot={{ 
+                  r: 4, 
+                  fill: getLineColor(),
+                  stroke: '#fff',
+                  strokeWidth: 2
+                }}
               />
             </LineChart>
           </ResponsiveContainer>
