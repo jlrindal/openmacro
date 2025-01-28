@@ -3,6 +3,18 @@ import Papa from 'papaparse';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Search, MapPin, DollarSign, Home, X } from 'lucide-react';
 
+function Header() {
+  return (
+    <div className="w-full">
+      <img 
+        src="/quantnomics.jpg" 
+        alt="Description"
+        className="w-full h-64 object-cover" 
+      />
+    </div>
+  );
+}
+
 const MobileHousingDashboard = () => {
   const [data, setData] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState('');
