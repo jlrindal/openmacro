@@ -157,7 +157,7 @@ const MobileHousingDashboard = () => {
   return (
     <div className="min-h-screen bg-white text-gray-800">
       <Header isMobile={isMobile} />
-      <div className="p-4">
+      <div className="p-4 md:max-w-7xl md:mx-auto md:px-8">
         <div className="relative mb-6">
           <div className="flex items-center bg-gray-100 rounded-lg border border-gray-200 h-16 relative">
             <Search size={isMobile ? 48 : 24} className="ml-4 text-gray-600" />
@@ -296,11 +296,11 @@ const MobileHousingDashboard = () => {
           </div>
         </div>
 
-        <div className={`mt-6 w-full ${isMobile ? 'h-[800px]' : 'h-[400px]'}`}>
+        <div className="mt-12 w-full mx-auto max-w-6xl h-[800px] md:h-[500px]">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={filteredData}
-              margin={{ left: 100, right: 20, top: 20, bottom: 70 }}
+              margin={{ left: 80, right: 40, top: 20, bottom: 70 }}
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis
