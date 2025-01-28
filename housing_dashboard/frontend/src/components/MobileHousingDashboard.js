@@ -214,13 +214,13 @@ const MobileHousingDashboard = () => {
             <MapPin size={64} className="mr-6 text-gray-600" />
             <div className="flex-1">
               <h3 className="text-lg font-semibold mb-2">Current Location</h3>
-              <p className={`${
-                selectedLocation.length > 15 
+              <p className={`${isMobile ? 
+                (selectedLocation.length > 20 
                   ? 'text-3xl' 
-                  : selectedLocation.length > 10 
+                  : selectedLocation.length > 15 
                     ? 'text-4xl' 
-                    : 'text-5xl'
-              } truncate`}>{selectedLocation}</p>
+                    : 'text-5xl') 
+                : 'text-2xl'} truncate font-semibold`}>{selectedLocation}</p>
             </div>
           </div>
 
