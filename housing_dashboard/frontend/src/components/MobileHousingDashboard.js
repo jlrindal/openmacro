@@ -4,15 +4,15 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { Search, MapPin, DollarSign, Home, X } from 'lucide-react';
 
 function Header() {
- return (
-   <div className="w-full">
-     <img 
-       src={process.env.PUBLIC_URL + '/quantnomics.jpg'}
-       alt="Quantnomics Header"
-       className="w-full h-64 object-cover" 
-     />
-   </div>
- );
+  return (
+    <div className="w-full h-auto overflow-hidden">
+      <img 
+        src={process.env.PUBLIC_URL + '/quantnomics.jpg'}
+        alt="Quantnomics Header"
+        className="w-full max-h-[400px] object-contain" // Changed these classes
+      />
+    </div>
+  );
 }
 
 const MobileHousingDashboard = () => {
