@@ -249,7 +249,7 @@ const MobileHousingDashboard = () => {
           </div>
 
           <div className="md:col-span-1">
-            <div className="bg-gray-100 rounded-xl p-6 text-center">
+            <div className="bg-gray-100 rounded-xl p-6 text-center h-full flex flex-col justify-between">
               <div>
                 <span className="font-bold text-gray-800 text-4xl md:text-5xl">
                   {score}
@@ -265,6 +265,17 @@ const MobileHousingDashboard = () => {
                    'Very Low Affordability'}
                 </p>
               </div>
+          
+              <div className="mt-4 px-4">
+                <div className="w-full bg-gray-200 rounded-full h-6 overflow-hidden">
+                  <div
+                    className={`h-full ${getScoreColor(score)} transition-all duration-500`}
+                    style={{ width: `${(score / 10) * 100}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
 
               <div className="mt-4">
                 <div className="w-full bg-gray-200 rounded-full h-6 overflow-hidden">
