@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Papa from 'papaparse';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Search, MapPin, DollarSign, Home, X } from 'lucide-react';
@@ -22,6 +22,7 @@ const MobileHousingDashboard = () => {
   const [locations, setLocations] = useState([]);
   const [outlineColor, setOutlineColor] = useState('#FFD700');
   const [showDropdown, setShowDropdown] = useState(false);
+  const [animationProgress, setAnimationProgress] = useState(0);
 
   useEffect(() => {
     const loadData = async () => {
@@ -56,6 +57,17 @@ const MobileHousingDashboard = () => {
         setLocations(uniqueLocations);
         setSelectedLocation(uniqueLocations[0] || '');
         setData(parsedData);
+        
+        // Start animation after data is loaded
+        let progress = 0;
+        const animationInterval = setInterval(() => {
+          progress += 0.02;
+          if (progress >= 1) {
+            clearInterval(animationInterval);
+            progress = 1;
+          }
+          setAnimationProgress(progress);
+        }, 20);
       } catch (error) {
         console.error('Error loading data:', error);
       }
@@ -72,7 +84,15 @@ const MobileHousingDashboard = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const filteredData = data.filter(item => item.location === selectedLocation);
+  const filteredData = useMemo(() => {
+    const filtered = data.filter(item => item.location === selectedLocation);
+    const dataLength = filtered.length;
+    return filtered.map((item, index) => ({
+      ...item,
+      ratio: index <= dataLength * animationProgress ? item.ratio : null
+    }));
+  }, [data, selectedLocation, animationProgress]);
+
   const filteredLocations = locations.filter(location =>
     location.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -87,7 +107,7 @@ const MobileHousingDashboard = () => {
 
   const getAffordabilityRange = () => {
     if (filteredData.length === 0) return [0, 40];
-    const ratios = filteredData.map(item => item.ratio);
+    const ratios = filteredData.map(item => item.ratio).filter(ratio => ratio !== null);
     const minRatio = Math.min(...ratios);
     const maxRatio = Math.max(...ratios);
     return [Math.max(0, minRatio - 5), Math.min(40, maxRatio + 5)];
@@ -122,6 +142,28 @@ const MobileHousingDashboard = () => {
 
   const currentMedianHHI = latestDataPoint?.median_hhi || 0;
   const currentListingPrice = latestDataPoint?.median_price || 0;
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      const value = payload[0].value;
+      if (value === null) return null;
+      
+      const date = new Date(label);
+      return (
+        <div className="bg-white p-4 shadow-lg border border-gray-100 rounded-lg">
+          <p className="font-semibold text-gray-800 mb-2">
+            {date.toLocaleDateString('en-US', { 
+              year: 'numeric',
+              month: 'long'
+            })}
+          </p>
+          <p className="text-gray-600">
+            <span className="font-medium">{value.toFixed(1)}%</span> of income
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <div className="min-h-screen bg-white text-gray-800">
@@ -243,13 +285,13 @@ const MobileHousingDashboard = () => {
           <p className="text-center my-6 text-xl md:text-2xl text-gray-700">
             In <span className="font-bold">{selectedLocation}</span>'s metro area, a typical family buying a typical home would have to spend{' '}
             <span className="font-bold" style={{ color: getLineColor() }}>
-              {filteredData[filteredData.length - 1].ratio.toFixed(1)}%
+              {filteredData[filteredData.length - 1]?.ratio?.toFixed(1) || 0}%
             </span>{' '}
             of their gross monthly income on the mortgage.
           </p>
         )}
 
-        <div className="mt-8 w-full mx-auto max-w-6xl h-[500px] md:h-[600px] bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+        <div className="mt-8 w-full mx-auto max-w-6xl h-[500px] md:h-[600px] bg-white p-8 rounded-lg border border-gray-100 shadow-sm">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={filteredData}
@@ -259,25 +301,32 @@ const MobileHousingDashboard = () => {
                 strokeDasharray="3 3" 
                 stroke="#f3f4f6" 
                 vertical={false}
+                strokeWidth={0.8}
               />
               <XAxis
                 dataKey="date"
                 stroke="#374151"
-                tick={{ fill: '#374151', fontSize: 12, fontFamily: 'system-ui' }}
+                tick={{ 
+                  fill: '#374151', 
+                  fontSize: 13,
+                  fontFamily: 'system-ui',
+                  fontWeight: 500 
+                }}
                 tickFormatter={(value) => {
                   const date = new Date(value);
                   return date.getFullYear();
                 }}
                 padding={{ left: 0, right: 0 }}
-                axisLine={{ stroke: '#e5e7eb' }}
-                tickLine={{ stroke: '#e5e7eb' }}
+                axisLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
+                tickLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
               />
               <YAxis
                 stroke="#374151"
                 tick={{ 
                   fill: '#374151', 
-                  fontSize: 12,
+                  fontSize: 13,
                   fontFamily: 'system-ui',
+                  fontWeight: 500,
                   dx: -10
                 }}
                 label={{
@@ -287,60 +336,39 @@ const MobileHousingDashboard = () => {
                   fill: '#374151',
                   fontSize: 14,
                   fontFamily: 'system-ui',
+                  fontWeight: 500,
                   dx: -50,
                   dy: 120
                 }}
                 domain={affordabilityRange}
                 tickCount={6}
                 tickFormatter={(value) => value.toFixed(0)}
-                axisLine={{ stroke: '#e5e7eb' }}
-                tickLine={{ stroke: '#e5e7eb' }}
+                axisLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
+                tickLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
               />
-              <Tooltip
-                contentStyle={{ 
-                  backgroundColor: '#fff',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '4px',
-                  fontSize: 12,
-                  fontFamily: 'system-ui',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-                  padding: '8px 12px'
-                }}
-                labelStyle={{ 
-                  color: '#374151',
-                  fontWeight: 600,
-                  marginBottom: '4px'
-                }}
-                formatter={(value) => [`${value.toFixed(1)}%`, 'Income Share']}
-                labelFormatter={(label) => {
-                  const date = new Date(label);
-                  return date.toLocaleDateString('en-US', { 
-                    year: 'numeric',
-                    month: 'long'
-                  });
-                }}
-              />
+              <Tooltip content={<CustomTooltip />} />
               <Line
                 type="monotone"
                 dataKey="ratio"
                 stroke={getLineColor()}
-                strokeWidth={2}
+                strokeWidth={2.5}
                 dot={false}
                 activeDot={{ 
-                  r: 4, 
+                  r: 6, 
                   fill: getLineColor(),
                   stroke: '#fff',
                   strokeWidth: 2
                 }}
+                connectNulls={false}
               />
             </LineChart>
           </ResponsiveContainer>
         </div>
-        <div className="text-right space-y-1">
+        <div className="text-right space-y-1 mt-4">
           <p className="text-sm md:text-base text-gray-500 italic">
             * Excludes property taxes, insurance, and other housing costs
           </p>
-          <p className="text-sm md:text-base text-gray-500">
+          <p className="text-sm md:text-base text-gray-500 font-medium">
             Source: FRED, US Census Bureau
           </p>
         </div>
