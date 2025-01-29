@@ -4,7 +4,6 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { Search, MapPin, DollarSign, Home, X } from 'lucide-react';
 import _ from 'lodash';
 
-// AffordabilityDistribution Component
 const AffordabilityDistribution = ({ data }) => {
   // Process data for distribution
   const bins = 20;
@@ -35,7 +34,7 @@ const AffordabilityDistribution = ({ data }) => {
             {`${data.binStart.toFixed(1)}% - ${data.binEnd.toFixed(1)}%`}
           </p>
           <p className="text-gray-600">
-            <span className="font-medium">{data.count}</span> metros
+            <span className="font-medium">{data.count}</span> metro areas
           </p>
         </div>
       );
@@ -44,30 +43,57 @@ const AffordabilityDistribution = ({ data }) => {
   };
 
   return (
-    <div className="w-full h-48 mt-6">
+    <div className="w-full h-[400px] mt-6">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={histogramData}
-          margin={{ top: 20, right: 30, left: 20, bottom: 30 }}
+          margin={{ left: 80, right: 50, top: 40, bottom: 60 }}
         >
+          <CartesianGrid 
+            strokeDasharray="2 2" 
+            stroke="#e5e7eb" 
+            vertical={false}
+            strokeWidth={1}
+          />
           <XAxis
             dataKey="binRange"
+            stroke="#374151"
             tick={{ 
-              fontSize: 10,
-              fill: '#1f2937'
+              fill: '#1f2937', 
+              fontSize: 12,
+              fontFamily: 'system-ui',
+              fontWeight: 500 
             }}
             interval={1}
             angle={-45}
             textAnchor="end"
-            height={60}
+            height={80}
+            padding={{ left: 0, right: 0 }}
+            axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+            tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
           />
           <YAxis
+            stroke="#374151"
+            tick={{ 
+              fill: '#1f2937', 
+              fontSize: 12,
+              fontFamily: 'system-ui',
+              fontWeight: 500,
+              dx: -10
+            }}
             label={{
               value: 'Number of Metro Areas',
               angle: -90,
               position: 'insideLeft',
-              style: { textAnchor: 'middle' }
+              fill: '#1f2937',
+              fontSize: 13,
+              fontFamily: 'system-ui',
+              fontWeight: 500,
+              dx: -50,
+              dy: 120
             }}
+            axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+            tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
           />
           <Tooltip content={<CustomTooltip />} />
           <Bar
