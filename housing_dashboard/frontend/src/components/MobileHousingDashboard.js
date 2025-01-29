@@ -5,16 +5,23 @@ import { Search, MapPin, DollarSign, Home, X } from 'lucide-react';
 import _ from 'lodash';
 
 const AffordabilityDistribution = ({ data }) => {
+  // Get available years and sort them
+  const years = [...new Set(data.map(item => new Date(item.date).getFullYear()))].sort((a, b) => b - a);
+  const [selectedYear, setSelectedYear] = useState(years[0]);  // Start with most recent year
+
   // Process data for distribution with more granular bins
-  const bins = 30; // Increased number of bins
-  const allRatios = data.map(item => item.ratio);
+  const bins = 30;
+  
+  // Filter data for selected year
+  const yearData = data.filter(item => new Date(item.date).getFullYear() === selectedYear);
+  const allRatios = yearData.map(item => item.ratio);
   const minRatio = Math.floor(Math.min(...allRatios));
   const maxRatio = Math.ceil(Math.max(...allRatios));
   const binWidth = (maxRatio - minRatio) / bins;
 
   // Calculate percentage of somewhat affordable or better metros
-  const totalMetros = data.length;
-  const affordableMetros = data.filter(item => item.ratio <= 20).length;  // 20% is the "somewhat affordable" threshold
+  const totalMetros = yearData.length;
+  const affordableMetros = yearData.filter(item => item.ratio <= 20).length;
   const affordablePercentage = ((affordableMetros / totalMetros) * 100).toFixed(1);
 
   // Legend data
@@ -66,11 +73,24 @@ const AffordabilityDistribution = ({ data }) => {
 
   return (
     <div className="mt-8 w-full mx-auto max-w-6xl bg-white rounded-lg border border-gray-100 shadow-sm">
-      {/* Add descriptive text */}
-      <p className="text-center px-8 pt-8 text-xl md:text-2xl text-gray-700">
-        In {new Date().getFullYear()}, <span className="font-bold">{affordablePercentage}%</span> of metro areas have{' '}
-        <span className="font-bold" style={{ color: '#eab308' }}>somewhat affordable</span> or better mortgage costs, 
-        requiring 20% or less of gross household income.
+      {/* Year selector */}
+      <div className="flex justify-end px-8 pt-8">
+        <select
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(Number(e.target.value))}
+          className="px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          {years.map(year => (
+            <option key={year} value={year}>{year}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Descriptive text */}
+      <p className="text-center px-8 pt-6 text-xl md:text-2xl text-gray-700">
+        In {selectedYear}, <span className="font-bold">{affordablePercentage}%</span> of metro areas have{' '}
+        <span className="font-bold" style={{ color: '#eab308' }}>somewhat affordable</span> or better housing costs, 
+        requiring 20% or less of household income.
       </p>
       
       {/* Chart container */}
@@ -95,7 +115,7 @@ const AffordabilityDistribution = ({ data }) => {
                 fontFamily: 'system-ui',
                 fontWeight: 500 
               }}
-              interval={2}  // Show every third value
+              interval={2}
               tickFormatter={(value) => `${value}%`}
               padding={{ left: 0, right: 0 }}
               axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
@@ -139,7 +159,7 @@ const AffordabilityDistribution = ({ data }) => {
         </ResponsiveContainer>
       </div>
 
-      {/* Legend moved to bottom */}
+      {/* Legend at bottom */}
       <div className="px-8 pb-8 flex flex-wrap gap-4 justify-center">
         {legendItems.map((item, index) => (
           <div key={index} className="flex items-center">
