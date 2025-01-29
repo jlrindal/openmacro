@@ -191,20 +191,19 @@ const AffordabilityDistribution = ({ data }) => {
 
 function Header() {
   return (
-    <>
-      <div className="w-full h-auto overflow-hidden border-b-2 border-gray-200">
-        <img 
-          src="/quantnomics.png"
-          alt="Quantnomics Header"
-          className="w-full max-h-[300px] md:max-h-[150px] object-contain"
-        />
-        <div className="text-center py-4 px-4">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-800 font-serif">
-            Can You Afford It? Mortgage Costs by Metro
-          </h1>
-        </div>
+    <div className="w-full h-auto overflow-hidden">
+      <img 
+        src="/quantnomics.png"
+        alt="Quantnomics Header"
+        className="w-full max-h-[300px] md:max-h-[150px] object-contain"
+      />
+      <div className="w-full h-px bg-gray-200"></div>
+      <div className="text-center py-4 px-4">
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-800 font-serif">
+          Can You Afford It? Mortgage Costs by Metro
+        </h1>
       </div>
-    </>
+    </div>
   );
 }
 
