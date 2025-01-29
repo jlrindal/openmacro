@@ -199,7 +199,7 @@ function Header() {
       />
       <div className="text-center py-4 px-4">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-800 font-serif">
-          Can You Afford It? Mortgage Costs by Metro
+          Housing Affordability Dashboard
         </h1>
       </div>
     </div>
