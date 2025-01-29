@@ -25,9 +25,7 @@ const AffordabilityDistribution = ({ data }) => {
 
   // Process data for distribution with more granular bins
   const bins = 30;
-  const allRatios = filteredData.length > 0 
-  ? filteredData.map(item => item.ratio)
-  : [];
+  const allRatios = filteredData.map(item => item.ratio);
   const minRatio = allRatios.length > 0 ? Math.floor(Math.min(...allRatios)) : 0;
   const maxRatio = allRatios.length > 0 ? Math.ceil(Math.max(...allRatios)) : 30;
   const binWidth = (maxRatio - minRatio) / bins;
@@ -88,97 +86,105 @@ const AffordabilityDistribution = ({ data }) => {
 
   return (
     <div className="mt-8 w-full mx-auto max-w-6xl bg-white rounded-lg border border-gray-100 shadow-sm">
-      <div className="px-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p className="text-xl md:text-2xl text-gray-700 text-center md:text-left">
-          In {selectedYear}, <span className="font-bold">{affordablePercentage}%</span> of metro areas have{' '}
-          <span className="font-bold" style={{ color: '#eab308' }}>somewhat affordable</span> or better housing costs, 
-          requiring 20% or less of household income.
-        </p>
-        <select 
-          value={selectedYear || ''}
-          onChange={(e) => setSelectedYear(Number(e.target.value))}
-          className="p-2 border rounded-lg bg-white shadow-sm text-gray-700 min-w-[120px]"
-        >
-          {availableYears.map(year => (
-            <option key={year} value={year}>{year}</option>
-          ))}
-        </select>
-      </div>
-
-      <div className="h-[500px] md:h-[600px] p-8 pb-4">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={histogramData}
-            margin={{ left: 80, right: 50, top: 40, bottom: 20 }}
-          >
-            <CartesianGrid 
-              strokeDasharray="2 2" 
-              stroke="#e5e7eb" 
-              vertical={false}
-              strokeWidth={1}
-            />
-            <XAxis
-              dataKey="binRange"
-              stroke="#374151"
-              tick={{ 
-                fill: '#1f2937', 
-                fontSize: 12,
-                fontFamily: 'system-ui',
-                fontWeight: 500 
-              }}
-              interval={2}
-              tickFormatter={(value) => `${value}%`}
-              padding={{ left: 0, right: 0 }}
-              axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
-              tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
-            />
-            <YAxis
-              stroke="#374151"
-              tick={{ 
-                fill: '#1f2937', 
-                fontSize: 12,
-                fontFamily: 'system-ui',
-                fontWeight: 500,
-                dx: -10
-              }}
-              label={{
-                value: 'Number of Metro Areas',
-                angle: -90,
-                position: 'insideLeft',
-                fill: '#1f2937',
-                fontSize: 13,
-                fontFamily: 'system-ui',
-                fontWeight: 500,
-                dx: -50,
-                dy: 120
-              }}
-              axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
-              tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Bar
-              dataKey="count"
-              radius={[4, 4, 0, 0]}
+      {availableYears.length === 0 ? (
+        <div className="p-8 text-center text-gray-500">
+          Loading year data...
+        </div>
+      ) : (
+        <>
+          <div className="px-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-xl md:text-2xl text-gray-700 text-center md:text-left">
+              In {selectedYear}, <span className="font-bold">{affordablePercentage}%</span> of metro areas have{' '}
+              <span className="font-bold" style={{ color: '#eab308' }}>somewhat affordable</span> or better housing costs, 
+              requiring 20% or less of household income.
+            </p>
+            <select 
+              value={selectedYear || ''}
+              onChange={(e) => setSelectedYear(Number(e.target.value))}
+              className="p-2 border rounded-lg bg-white shadow-sm text-gray-700 min-w-[120px]"
             >
-              {histogramData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={getBarColor(entry.ratio)} />
+              {availableYears.map(year => (
+                <option key={year} value={year}>{year}</option>
               ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-
-      <div className="px-8 pb-8 flex flex-wrap gap-4 justify-center">
-        {legendItems.map((item, index) => (
-          <div key={index} className="flex items-center">
-            <div 
-              className="w-4 h-4 rounded-sm mr-2" 
-              style={{ backgroundColor: item.color }}
-            />
-            <span className="text-sm text-gray-600">{item.label}</span>
+            </select>
           </div>
-        ))}
-      </div>
+
+          <div className="h-[500px] md:h-[600px] p-8 pb-4">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={histogramData}
+                margin={{ left: 80, right: 50, top: 40, bottom: 20 }}
+              >
+                <CartesianGrid 
+                  strokeDasharray="2 2" 
+                  stroke="#e5e7eb" 
+                  vertical={false}
+                  strokeWidth={1}
+                />
+                <XAxis
+                  dataKey="binRange"
+                  stroke="#374151"
+                  tick={{ 
+                    fill: '#1f2937', 
+                    fontSize: 12,
+                    fontFamily: 'system-ui',
+                    fontWeight: 500 
+                  }}
+                  interval={2}
+                  tickFormatter={(value) => `${value}%`}
+                  padding={{ left: 0, right: 0 }}
+                  axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+                  tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+                />
+                <YAxis
+                  stroke="#374151"
+                  tick={{ 
+                    fill: '#1f2937', 
+                    fontSize: 12,
+                    fontFamily: 'system-ui',
+                    fontWeight: 500,
+                    dx: -10
+                  }}
+                  label={{
+                    value: 'Number of Metro Areas',
+                    angle: -90,
+                    position: 'insideLeft',
+                    fill: '#1f2937',
+                    fontSize: 13,
+                    fontFamily: 'system-ui',
+                    fontWeight: 500,
+                    dx: -50,
+                    dy: 120
+                  }}
+                  axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+                  tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+                />
+                <Tooltip content={<CustomTooltip />} />
+                <Bar
+                  dataKey="count"
+                  radius={[4, 4, 0, 0]}
+                >
+                  {histogramData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={getBarColor(entry.ratio)} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div className="px-8 pb-8 flex flex-wrap gap-4 justify-center">
+            {legendItems.map((item, index) => (
+              <div key={index} className="flex items-center">
+                <div 
+                  className="w-4 h-4 rounded-sm mr-2" 
+                  style={{ backgroundColor: item.color }}
+                />
+                <span className="text-sm text-gray-600">{item.label}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };
