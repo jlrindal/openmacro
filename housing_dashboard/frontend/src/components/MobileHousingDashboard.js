@@ -186,7 +186,7 @@ const MobileHousingDashboard = () => {
                         setShowDropdown(false);
                       }}
                     >
-                      <p className="text-base md:text-lg">{location}</p>
+                      <p className="text-base md:text-lg text-center">{location}</p>
                     </div>
                   ))}
                 </div>
@@ -195,14 +195,14 @@ const MobileHousingDashboard = () => {
           </div>
 
           <div
-            className="bg-gray-100 rounded-xl p-6 flex items-center relative overflow-hidden h-16"
+            className="bg-gray-100 rounded-xl p-6 flex items-center justify-center relative overflow-hidden h-16"
             style={{
               border: `4px solid ${outlineColor}`,
               transition: 'border-color 0.5s ease',
             }}
           >
             <MapPin size={32} className="mr-4 text-gray-600" />
-            <div className="flex-1">
+            <div className="flex-1 text-center">
               <p className="text-lg md:text-xl truncate font-semibold">{selectedLocation}</p>
             </div>
           </div>
@@ -210,9 +210,9 @@ const MobileHousingDashboard = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gray-100 rounded-xl p-6 flex items-center">
-              <DollarSign size={48} className="mr-6 text-gray-600" />
-              <div className="flex-1">
+            <div className="bg-gray-100 rounded-xl p-6 flex flex-col items-center text-center">
+              <DollarSign size={48} className="mb-4 text-gray-600" />
+              <div>
                 <h3 className="text-lg font-semibold mb-2">{currentYear} Median HHI</h3>
                 <p className="text-4xl md:text-3xl">
                   ${(Math.round(currentMedianHHI / 1000) * 1000).toLocaleString()}
@@ -220,9 +220,9 @@ const MobileHousingDashboard = () => {
               </div>
             </div>
 
-            <div className="bg-gray-100 rounded-xl p-6 flex items-center">
-              <Home size={48} className="mr-6 text-gray-600" />
-              <div className="flex-1">
+            <div className="bg-gray-100 rounded-xl p-6 flex flex-col items-center text-center">
+              <Home size={48} className="mb-4 text-gray-600" />
+              <div>
                 <h3 className="text-lg font-semibold mb-2">{currentYear} Median List Price</h3>
                 <p className="text-4xl md:text-3xl">
                   ${(Math.round(currentListingPrice / 1000) * 1000).toLocaleString()}
@@ -232,8 +232,8 @@ const MobileHousingDashboard = () => {
           </div>
 
           <div className="md:col-span-1">
-            <div className="bg-gray-100 rounded-xl p-6">
-              <div className="text-center">
+            <div className="bg-gray-100 rounded-xl p-6 text-center">
+              <div>
                 <span className="font-bold text-gray-800 text-4xl md:text-5xl">
                   {score}
                 </span>
