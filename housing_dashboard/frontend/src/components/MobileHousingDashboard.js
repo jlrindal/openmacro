@@ -12,6 +12,11 @@ const AffordabilityDistribution = ({ data }) => {
   const maxRatio = Math.ceil(Math.max(...allRatios));
   const binWidth = (maxRatio - minRatio) / bins;
 
+  // Calculate percentage of somewhat affordable or better metros
+  const totalMetros = data.length;
+  const affordableMetros = data.filter(item => item.ratio <= 20).length;  // 20% is the "somewhat affordable" threshold
+  const affordablePercentage = ((affordableMetros / totalMetros) * 100).toFixed(1);
+
   // Legend data
   const legendItems = [
     { label: 'Highly Affordable (≤10%)', color: '#16a34a' },
@@ -61,7 +66,15 @@ const AffordabilityDistribution = ({ data }) => {
 
   return (
     <div className="mt-8 w-full mx-auto max-w-6xl bg-white rounded-lg border border-gray-100 shadow-sm">
-      <div className="px-8 pt-8 flex flex-wrap gap-4 justify-center">
+      {/* Add descriptive text */}
+      <p className="text-center px-8 pt-8 text-xl md:text-2xl text-gray-700">
+        In {new Date().getFullYear()}, <span className="font-bold">{affordablePercentage}%</span> of metro areas have{' '}
+        <span className="font-bold" style={{ color: '#eab308' }}>somewhat affordable</span> or better housing costs, 
+        requiring 20% or less of household income.
+      </p>
+
+      {/* Legend */}
+      <div className="px-8 pt-6 flex flex-wrap gap-4 justify-center">
         {legendItems.map((item, index) => (
           <div key={index} className="flex items-center">
             <div 
@@ -73,6 +86,7 @@ const AffordabilityDistribution = ({ data }) => {
         ))}
       </div>
       
+      {/* Chart container */}
       <div className="h-[500px] md:h-[600px] p-8">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
