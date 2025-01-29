@@ -256,7 +256,7 @@ const MobileHousingDashboard = () => {
     <div className="min-h-screen bg-white text-gray-800">
       <Header />
       <div className="p-4 md:max-w-6xl md:mx-auto md:px-8 relative">
-        {/* ... Search and location section ... */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent pointer-events-none animate-pulse"></div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div className="relative">
             <div className="flex items-center bg-gray-100 rounded-lg border border-gray-200 h-16 relative">
@@ -316,9 +316,57 @@ const MobileHousingDashboard = () => {
           </div>
         </div>
 
-        {/* ... Stats and main chart section ... */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {/* ... Stats cards ... */}
+          <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gray-100 rounded-xl p-6 flex flex-col items-center text-center">
+              <DollarSign size={48} className="mb-4 text-gray-600" />
+              <div>
+                <h3 className="text-lg font-semibold mb-2">{currentYear} Median HHI</h3>
+                <p className="text-4xl md:text-3xl">
+                  ${(Math.round(currentMedianHHI / 1000) * 1000).toLocaleString()}
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-gray-100 rounded-xl p-6 flex flex-col items-center text-center">
+              <Home size={48} className="mb-4 text-gray-600" />
+              <div>
+                <h3 className="text-lg font-semibold mb-2">{currentYear} Median List Price</h3>
+                <p className="text-4xl md:text-3xl">
+                  ${(Math.round(currentListingPrice / 1000) * 1000).toLocaleString()}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="md:col-span-1">
+            <div className="bg-gray-100 rounded-xl p-6 text-center h-full flex flex-col justify-between">
+              <div>
+                <span className="font-bold text-gray-800 text-4xl md:text-5xl">
+                  {score}
+                </span>
+                <span className="font-bold text-gray-500 text-2xl md:text-3xl">
+                  {' '}/ 10
+                </span>
+                <p className="text-gray-600 mt-2 text-xl md:text-lg">
+                  {score >= 9 ? 'Highly Affordable' :
+                   score >= 7 ? 'Affordable' :
+                   score >= 5 ? 'Somewhat Affordable' :
+                   score >= 3 ? 'Low Affordability' :
+                   'Very Low Affordability'}
+                </p>
+              </div>
+
+              <div className="mt-4">
+                <div className="w-full bg-gray-200 rounded-full h-6 overflow-hidden">
+                  <div
+                    className={`h-full ${getScoreColor(score)} transition-all duration-500`}
+                    style={{ width: `${(score / 10) * 100}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {filteredData.length > 0 && (
@@ -331,19 +379,79 @@ const MobileHousingDashboard = () => {
           </p>
         )}
 
-        {/* Main chart */}
         <div className="mt-8 w-full mx-auto max-w-6xl h-[500px] md:h-[600px] bg-white p-8 rounded-lg border border-gray-100 shadow-sm">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={filteredData}
               margin={{ left: 80, right: 50, top: 40, bottom: 60 }}
             >
-              {/* ... Chart components ... */}
+              <CartesianGrid 
+                strokeDasharray="2 2" 
+                stroke="#e5e7eb" 
+                vertical={false}
+                strokeWidth={1}
+              />
+              <XAxis
+                dataKey="date"
+                stroke="#374151"
+                tick={{ 
+                  fill: '#1f2937', 
+                  fontSize: 12,
+                  fontFamily: 'system-ui',
+                  fontWeight: 500 
+                }}
+                tickFormatter={(value) => {
+                  const date = new Date(value);
+                  return date.getFullYear();
+                }}
+                padding={{ left: 0, right: 0 }}
+                axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+                tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+              />
+              <YAxis
+                stroke="#374151"
+                tick={{ 
+                  fill: '#1f2937', 
+                  fontSize: 12,
+                  fontFamily: 'system-ui',
+                  fontWeight: 500,
+                  dx: -10
+                }}
+                label={{
+                  value: 'Share of Monthly Income (%)',
+                  angle: -90,
+                  position: 'insideLeft',
+                  fill: '#1f2937',
+                  fontSize: 13,
+                  fontFamily: 'system-ui',
+                  fontWeight: 500,
+                  dx: -50,
+                  dy: 120
+                }}
+                domain={affordabilityRange}
+                tickCount={6}
+                tickFormatter={(value) => value.toFixed(0)}
+                axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+                tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+              />
+              <Tooltip content={<CustomTooltip />} />
+              <Line
+                type="monotone"
+                dataKey="ratio"
+                stroke={getLineColor()}
+                strokeWidth={3}
+                dot={false}
+                activeDot={{ 
+                  r: 5, 
+                  fill: getLineColor(),
+                  stroke: '#fff',
+                  strokeWidth: 2
+                }}
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
-        {/* Source and notes */}
         <div className="text-right space-y-1 mt-4">
           <p className="text-sm md:text-base text-gray-500 italic">
             * Excludes property taxes, insurance, and other housing costs
@@ -353,7 +461,6 @@ const MobileHousingDashboard = () => {
           </p>
         </div>
 
-        {/* Affordability Lists and Distribution */}
         <div className="mt-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-100 rounded-xl p-6">
@@ -379,7 +486,7 @@ const MobileHousingDashboard = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Distribution Graph */}
           <div className="bg-gray-100 rounded-xl p-6 mt-6">
             <h3 className="text-xl font-semibold mb-4">Distribution of Housing Affordability ({mostRecentYear})</h3>
