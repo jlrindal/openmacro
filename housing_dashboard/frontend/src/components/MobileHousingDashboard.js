@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Search, MapPin, DollarSign, Home, X } from 'lucide-react';
@@ -22,7 +22,6 @@ const MobileHousingDashboard = () => {
   const [locations, setLocations] = useState([]);
   const [outlineColor, setOutlineColor] = useState('#FFD700');
   const [showDropdown, setShowDropdown] = useState(false);
-  const [animationProgress, setAnimationProgress] = useState(0);
 
   useEffect(() => {
     const loadData = async () => {
@@ -57,17 +56,6 @@ const MobileHousingDashboard = () => {
         setLocations(uniqueLocations);
         setSelectedLocation(uniqueLocations[0] || '');
         setData(parsedData);
-        
-        // Start animation after data is loaded
-        let progress = 0;
-        const animationInterval = setInterval(() => {
-          progress += 0.02;
-          if (progress >= 1) {
-            clearInterval(animationInterval);
-            progress = 1;
-          }
-          setAnimationProgress(progress);
-        }, 20);
       } catch (error) {
         console.error('Error loading data:', error);
       }
@@ -84,15 +72,7 @@ const MobileHousingDashboard = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const filteredData = useMemo(() => {
-    const filtered = data.filter(item => item.location === selectedLocation);
-    const dataLength = filtered.length;
-    return filtered.map((item, index) => ({
-      ...item,
-      ratio: index <= dataLength * animationProgress ? item.ratio : null
-    }));
-  }, [data, selectedLocation, animationProgress]);
-
+  const filteredData = data.filter(item => item.location === selectedLocation);
   const filteredLocations = locations.filter(location =>
     location.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -107,7 +87,7 @@ const MobileHousingDashboard = () => {
 
   const getAffordabilityRange = () => {
     if (filteredData.length === 0) return [0, 40];
-    const ratios = filteredData.map(item => item.ratio).filter(ratio => ratio !== null);
+    const ratios = filteredData.map(item => item.ratio);
     const minRatio = Math.min(...ratios);
     const maxRatio = Math.max(...ratios);
     return [Math.max(0, minRatio - 5), Math.min(40, maxRatio + 5)];
@@ -285,7 +265,7 @@ const MobileHousingDashboard = () => {
           <p className="text-center my-6 text-xl md:text-2xl text-gray-700">
             In <span className="font-bold">{selectedLocation}</span>'s metro area, a typical family buying a typical home would have to spend{' '}
             <span className="font-bold" style={{ color: getLineColor() }}>
-              {filteredData[filteredData.length - 1]?.ratio?.toFixed(1) || 0}%
+              {filteredData[filteredData.length - 1].ratio.toFixed(1)}%
             </span>{' '}
             of their gross monthly income on the mortgage.
           </p>
@@ -298,17 +278,17 @@ const MobileHousingDashboard = () => {
               margin={{ left: 80, right: 50, top: 40, bottom: 60 }}
             >
               <CartesianGrid 
-                strokeDasharray="3 3" 
-                stroke="#f3f4f6" 
+                strokeDasharray="2 2" 
+                stroke="#e5e7eb" 
                 vertical={false}
-                strokeWidth={0.8}
+                strokeWidth={1}
               />
               <XAxis
                 dataKey="date"
                 stroke="#374151"
                 tick={{ 
-                  fill: '#374151', 
-                  fontSize: 13,
+                  fill: '#1f2937', 
+                  fontSize: 12,
                   fontFamily: 'system-ui',
                   fontWeight: 500 
                 }}
@@ -317,14 +297,14 @@ const MobileHousingDashboard = () => {
                   return date.getFullYear();
                 }}
                 padding={{ left: 0, right: 0 }}
-                axisLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
-                tickLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
+                axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+                tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
               />
               <YAxis
                 stroke="#374151"
                 tick={{ 
-                  fill: '#374151', 
-                  fontSize: 13,
+                  fill: '#1f2937', 
+                  fontSize: 12,
                   fontFamily: 'system-ui',
                   fontWeight: 500,
                   dx: -10
@@ -333,8 +313,8 @@ const MobileHousingDashboard = () => {
                   value: 'Share of Monthly Income (%)',
                   angle: -90,
                   position: 'insideLeft',
-                  fill: '#374151',
-                  fontSize: 14,
+                  fill: '#1f2937',
+                  fontSize: 13,
                   fontFamily: 'system-ui',
                   fontWeight: 500,
                   dx: -50,
@@ -343,23 +323,22 @@ const MobileHousingDashboard = () => {
                 domain={affordabilityRange}
                 tickCount={6}
                 tickFormatter={(value) => value.toFixed(0)}
-                axisLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
-                tickLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
+                axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+                tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
               />
               <Tooltip content={<CustomTooltip />} />
               <Line
                 type="monotone"
                 dataKey="ratio"
                 stroke={getLineColor()}
-                strokeWidth={2.5}
+                strokeWidth={3}
                 dot={false}
                 activeDot={{ 
-                  r: 6, 
+                  r: 5, 
                   fill: getLineColor(),
                   stroke: '#fff',
                   strokeWidth: 2
                 }}
-                connectNulls={false}
               />
             </LineChart>
           </ResponsiveContainer>
