@@ -5,58 +5,43 @@ import { Search, MapPin, DollarSign, Home, X } from 'lucide-react';
 import _ from 'lodash';
 
 const AffordabilityDistribution = ({ data }) => {
-  // Extract available years from data
   const availableYears = data.length 
     ? [...new Set(data.map(item => item.year))].sort((a, b) => b - a) 
     : [];
   
-  // State for selected year
   const [selectedYear, setSelectedYear] = useState(availableYears[0] || null);
 
-  // Update selected year if current selection becomes unavailable
   useEffect(() => {
     if (availableYears.length > 0 && !availableYears.includes(selectedYear)) {
       setSelectedYear(availableYears[0]);
     }
   }, [data, selectedYear, availableYears]);
 
-  // Filter data based on selected year
   const filteredData = data.filter(item => item.year === selectedYear);
-
-  // Process data for distribution with more granular bins
-  const bins = 30;
   const allRatios = filteredData.map(item => item.ratio);
-  const minRatio = allRatios.length > 0 ? Math.floor(Math.min(...allRatios)) : 0;
-  const maxRatio = allRatios.length > 0 ? Math.ceil(Math.max(...allRatios)) : 30;
+  
+  // Histogram calculations
+  const bins = 30;
+  const minRatio = allRatios.length ? Math.floor(Math.min(...allRatios)) : 0;
+  const maxRatio = allRatios.length ? Math.ceil(Math.max(...allRatios)) : 30;
   const binWidth = (maxRatio - minRatio) / bins;
 
-  // Calculate percentage of somewhat affordable or better metros
   const totalMetros = filteredData.length;
   const affordableMetros = filteredData.filter(item => item.ratio <= 20).length;
   const affordablePercentage = totalMetros > 0 
     ? ((affordableMetros / totalMetros) * 100).toFixed(1)
     : '0.0';
 
-  // Legend data
-  const legendItems = [
-    { label: 'Highly Affordable (≤10%)', color: '#16a34a' },
-    { label: 'Affordable (10-15%)', color: '#22c55e' },
-    { label: 'Somewhat Affordable (15-20%)', color: '#eab308' },
-    { label: 'Low Affordability (20-25%)', color: '#f97316' },
-    { label: 'Very Low Affordability (>25%)', color: '#dc2626' }
-  ];
-
-  // Create histogram data
   const histogramData = _.range(bins).map(i => {
     const binStart = minRatio + (i * binWidth);
     const binEnd = binStart + binWidth;
     const count = allRatios.filter(ratio => ratio >= binStart && ratio < binEnd).length;
     return {
-      binRange: `${binStart.toFixed(1)}`,
-      count,
       binStart,
       binEnd,
-      ratio: (binStart + binEnd) / 2
+      count,
+      label: `${binStart.toFixed(1)}-${binEnd.toFixed(1)}`,
+      midpoint: (binStart + binEnd) / 2
     };
   });
 
@@ -122,7 +107,7 @@ const AffordabilityDistribution = ({ data }) => {
                   strokeWidth={1}
                 />
                 <XAxis
-                  dataKey="binRange"
+                  dataKey="label"
                   stroke="#374151"
                   tick={{ 
                     fill: '#1f2937', 
@@ -131,7 +116,6 @@ const AffordabilityDistribution = ({ data }) => {
                     fontWeight: 500 
                   }}
                   interval={2}
-                  tickFormatter={(value) => `${value}%`}
                   padding={{ left: 0, right: 0 }}
                   axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
                   tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
@@ -165,7 +149,10 @@ const AffordabilityDistribution = ({ data }) => {
                   radius={[4, 4, 0, 0]}
                 >
                   {histogramData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={getBarColor(entry.ratio)} />
+                    <Cell 
+                      key={`cell-${index}`} 
+                      fill={getBarColor(entry.midpoint)} 
+                    />
                   ))}
                 </Bar>
               </BarChart>
@@ -173,7 +160,13 @@ const AffordabilityDistribution = ({ data }) => {
           </div>
 
           <div className="px-8 pb-8 flex flex-wrap gap-4 justify-center">
-            {legendItems.map((item, index) => (
+            {[
+              { label: 'Highly Affordable (≤10%)', color: '#16a34a' },
+              { label: 'Affordable (10-15%)', color: '#22c55e' },
+              { label: 'Somewhat Affordable (15-20%)', color: '#eab308' },
+              { label: 'Low Affordability (20-25%)', color: '#f97316' },
+              { label: 'Very Low Affordability (>25%)', color: '#dc2626' }
+            ].map((item, index) => (
               <div key={index} className="flex items-center">
                 <div 
                   className="w-4 h-4 rounded-sm mr-2" 
@@ -199,7 +192,7 @@ function Header() {
       />
       <div className="w-full h-px bg-gray-200 my-6"></div>
       <div className="text-center py-8 px-4">
-        <h1 className="text-1xl md:text-5xl text-gray-800 font-serif">
+        <h1 className="text-xl md:text-5xl text-gray-800 font-serif">
           Can <span className="font-extrabold italic">YOU</span> Afford It? Mortgage Costs by Metro
         </h1>
       </div>
@@ -255,6 +248,7 @@ const MobileHousingDashboard = () => {
 
     loadData();
   }, []);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setOutlineColor((prevColor) => (prevColor === '#FFD700' ? '#00BFFF' : '#FFD700'));
@@ -268,7 +262,6 @@ const MobileHousingDashboard = () => {
     location.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Calculate latest ratios for all locations
   const latestRatios = data.reduce((acc, curr) => {
     if (!acc[curr.location] || curr.date > acc[curr.location].date) {
       acc[curr.location] = { ratio: curr.ratio, date: curr.date };
@@ -284,20 +277,20 @@ const MobileHousingDashboard = () => {
   const mostAffordable = [...locationsWithRatios].sort((a, b) => a.ratio - b.ratio).slice(0, 10);
   const mostUnaffordable = [...locationsWithRatios].sort((a, b) => b.ratio - a.ratio).slice(0, 10);
 
-  // Get most recent year's data for distribution graph
   const mostRecentYear = Math.max(...data.map(item => new Date(item.date).getFullYear()));
   const mostRecentData = data.reduce((acc, curr) => {
-  const year = new Date(curr.date).getFullYear();
-  if (year === mostRecentYear) {
-    if (!acc[curr.location] || new Date(curr.date) > new Date(acc[curr.location].date)) {
-      acc[curr.location] = {
-        ...curr,
-        year: year  // Add explicit year field
-      };
+    const year = new Date(curr.date).getFullYear();
+    if (year === mostRecentYear) {
+      if (!acc[curr.location] || new Date(curr.date) > new Date(acc[curr.location].date)) {
+        acc[curr.location] = {
+          ...curr,
+          year: year
+        };
+      }
     }
-  }
-  return acc;
+    return acc;
   }, {});
+  
   const distributionData = Object.values(mostRecentData);
 
   const getAffordabilityScore = () => {
@@ -346,12 +339,12 @@ const MobileHousingDashboard = () => {
   const currentMedianHHI = latestDataPoint?.median_hhi || 0;
   const currentListingPrice = latestDataPoint?.median_price || 0;
 
-  const CustomTooltip = ({ active, payload, label }) => {
+  const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const value = payload[0].value;
       if (value === null) return null;
       
-      const date = new Date(label);
+      const date = new Date(payload[0].payload.date);
       return (
         <div className="bg-white p-4 shadow-lg border border-gray-100 rounded-lg">
           <p className="font-semibold text-gray-800 mb-2">
@@ -446,7 +439,7 @@ const MobileHousingDashboard = () => {
             </div>
 
             <div className="bg-gray-100 rounded-xl p-6 flex flex-col items-center text-center">
-              <Home size={48} className="mb-4 text-gray-600" />
+                            <Home size={48} className="mb-4 text-gray-600" />
               <div>
                 <h3 className="text-lg font-semibold mb-2">{currentYear} Median List Price</h3>
                 <p className="text-4xl md:text-3xl">
@@ -604,7 +597,6 @@ const MobileHousingDashboard = () => {
             </div>
           </div>
 
-          {/* Distribution Graph */}
           <div className="mt-8">
             <AffordabilityDistribution data={distributionData} />
           </div>
@@ -615,3 +607,4 @@ const MobileHousingDashboard = () => {
 };
 
 export default MobileHousingDashboard;
+              
