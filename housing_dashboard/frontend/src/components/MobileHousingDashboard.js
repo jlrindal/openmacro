@@ -265,17 +265,6 @@ const MobileHousingDashboard = () => {
                    'Very Low Affordability'}
                 </p>
               </div>
-          
-              <div className="mt-4 px-4">
-                <div className="w-full bg-gray-200 rounded-full h-6 overflow-hidden">
-                  <div
-                    className={`h-full ${getScoreColor(score)} transition-all duration-500`}
-                    style={{ width: `${(score / 10) * 100}%` }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
 
               <div className="mt-4">
                 <div className="w-full bg-gray-200 rounded-full h-6 overflow-hidden">
