@@ -5,37 +5,40 @@ import { Search, MapPin, DollarSign, Home, X } from 'lucide-react';
 import _ from 'lodash';
 
 const AffordabilityDistribution = ({ data }) => {
-  // Get available years and sort them
-  const years = [...new Set(data.map(item => new Date(item.date).getFullYear()))].sort((a, b) => b - a);
+  // Parse dates and years
+  const processedData = data.map(item => ({
+    ...item,
+    year: parseInt(item.date.split('-')[0]),
+    ratio: parseFloat(item.ratio.replace('%', ''))
+  }));
+  
+  // Get unique years
+  const years = [...new Set(processedData.map(item => item.year))].sort((a, b) => b - a);
   const [selectedYear, setSelectedYear] = useState(years[0]);
 
-  // Process data for the selected year - get latest data point for each location
-  const yearData = Object.values(data.reduce((acc, item) => {
-    const year = new Date(item.date).getFullYear();
-    if (year === selectedYear) {
-      const location = item.location;
-      // If we haven't seen this location or this is a newer date, update it
-      if (!acc[location] || new Date(item.date) > new Date(acc[location].date)) {
-        acc[location] = {
-          ...item,
-          ratio: parseFloat(item.ratio?.toString().replace('%', '')) || 0
-        };
-      }
-    }
-    return acc;
-  }, {}));
+  // Get latest data for each location in selected year
+  const yearData = Object.values(
+    processedData
+      .filter(item => item.year === selectedYear)
+      .reduce((acc, item) => {
+        if (!acc[item.location] || item.date > acc[item.location].date) {
+          acc[item.location] = item;
+        }
+        return acc;
+      }, {})
+  );
 
-  // Process data for distribution with more granular bins
+  // Process data for distribution
   const bins = 30;
   const allRatios = yearData.map(item => item.ratio);
-  const minRatio = Math.floor(Math.min(...allRatios));
-  const maxRatio = Math.ceil(Math.max(...allRatios));
+  const minRatio = Math.floor(Math.min(...allRatios) || 0);
+  const maxRatio = Math.ceil(Math.max(...allRatios) || 40);
   const binWidth = (maxRatio - minRatio) / bins;
 
   // Calculate percentage of somewhat affordable or better metros
   const totalMetros = yearData.length;
   const affordableMetros = yearData.filter(item => item.ratio <= 20).length;
-  const affordablePercentage = ((affordableMetros / totalMetros) * 100).toFixed(1);
+  const affordablePercentage = totalMetros > 0 ? ((affordableMetros / totalMetros) * 100).toFixed(1) : 0;
 
   // Legend data
   const legendItems = [
@@ -52,20 +55,20 @@ const AffordabilityDistribution = ({ data }) => {
     const binEnd = binStart + binWidth;
     const count = allRatios.filter(ratio => ratio >= binStart && ratio < binEnd).length;
     return {
-      binRange: `${binStart.toFixed(1)}`,  // Simplified to just show start value
+      binRange: `${binStart.toFixed(1)}`,
       count,
       binStart,
       binEnd,
-      ratio: (binStart + binEnd) / 2 // Middle point for color calculation
+      ratio: (binStart + binEnd) / 2
     };
   });
 
   const getBarColor = ratio => {
-    if (ratio <= 10) return '#16a34a';  // Very affordable
-    if (ratio <= 15) return '#22c55e';  // Affordable
-    if (ratio <= 20) return '#eab308';  // Somewhat affordable
-    if (ratio <= 25) return '#f97316';  // Low affordability
-    return '#dc2626';                   // Very low affordability
+    if (ratio <= 10) return '#16a34a';
+    if (ratio <= 15) return '#22c55e';
+    if (ratio <= 20) return '#eab308';
+    if (ratio <= 25) return '#f97316';
+    return '#dc2626';
   };
 
   const CustomTooltip = ({ active, payload }) => {
