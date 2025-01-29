@@ -12,6 +12,15 @@ const AffordabilityDistribution = ({ data }) => {
   const maxRatio = Math.ceil(Math.max(...allRatios));
   const binWidth = (maxRatio - minRatio) / bins;
 
+  // Legend data
+  const legendItems = [
+    { label: 'Highly Affordable (≤10%)', color: '#16a34a' },
+    { label: 'Affordable (10-15%)', color: '#22c55e' },
+    { label: 'Somewhat Affordable (15-20%)', color: '#eab308' },
+    { label: 'Low Affordability (20-25%)', color: '#f97316' },
+    { label: 'Very Low Affordability (>25%)', color: '#dc2626' }
+  ];
+
   // Create histogram data
   const histogramData = _.range(bins).map(i => {
     const binStart = minRatio + (i * binWidth);
@@ -51,69 +60,83 @@ const AffordabilityDistribution = ({ data }) => {
   };
 
   return (
-    <div className="w-full h-[500px] md:h-[600px] bg-white p-8 rounded-lg border border-gray-100 shadow-sm">
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart
-          data={histogramData}
-          margin={{ left: 80, right: 50, top: 40, bottom: 60 }}
-        >
-          <CartesianGrid 
-            strokeDasharray="2 2" 
-            stroke="#e5e7eb" 
-            vertical={false}
-            strokeWidth={1}
-          />
-          <XAxis
-            dataKey="binRange"
-            stroke="#374151"
-            tick={{ 
-              fill: '#1f2937', 
-              fontSize: 12,
-              fontFamily: 'system-ui',
-              fontWeight: 500 
-            }}
-            interval={2}  // Show every third value
-            tickFormatter={(value) => `${value}%`}
-            padding={{ left: 0, right: 0 }}
-            axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
-            tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
-          />
-          <YAxis
-            stroke="#374151"
-            tick={{ 
-              fill: '#1f2937', 
-              fontSize: 12,
-              fontFamily: 'system-ui',
-              fontWeight: 500,
-              dx: -10
-            }}
-            label={{
-              value: 'Number of Metro Areas',
-              angle: -90,
-              position: 'insideLeft',
-              fill: '#1f2937',
-              fontSize: 13,
-              fontFamily: 'system-ui',
-              fontWeight: 500,
-              dx: -50,
-              dy: 120
-            }}
-            axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
-            tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
-          />
-          <Tooltip content={<CustomTooltip />} />
-          <Bar
-            dataKey="count"
-            radius={[4, 4, 0, 0]}
+    <div className="mt-8 w-full mx-auto max-w-6xl bg-white rounded-lg border border-gray-100 shadow-sm">
+      <div className="px-8 pt-8 flex flex-wrap gap-4 justify-center">
+        {legendItems.map((item, index) => (
+          <div key={index} className="flex items-center">
+            <div 
+              className="w-4 h-4 rounded-sm mr-2" 
+              style={{ backgroundColor: item.color }}
+            />
+            <span className="text-sm text-gray-600">{item.label}</span>
+          </div>
+        ))}
+      </div>
+      
+      <div className="h-[500px] md:h-[600px] p-8">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={histogramData}
+            margin={{ left: 80, right: 50, top: 40, bottom: 60 }}
           >
-            {
-              histogramData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={getBarColor(entry.ratio)} />
-              ))
-            }
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
+            <CartesianGrid 
+              strokeDasharray="2 2" 
+              stroke="#e5e7eb" 
+              vertical={false}
+              strokeWidth={1}
+            />
+            <XAxis
+              dataKey="binRange"
+              stroke="#374151"
+              tick={{ 
+                fill: '#1f2937', 
+                fontSize: 12,
+                fontFamily: 'system-ui',
+                fontWeight: 500 
+              }}
+              interval={2}  // Show every third value
+              tickFormatter={(value) => `${value}%`}
+              padding={{ left: 0, right: 0 }}
+              axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+              tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+            />
+            <YAxis
+              stroke="#374151"
+              tick={{ 
+                fill: '#1f2937', 
+                fontSize: 12,
+                fontFamily: 'system-ui',
+                fontWeight: 500,
+                dx: -10
+              }}
+              label={{
+                value: 'Number of Metro Areas',
+                angle: -90,
+                position: 'insideLeft',
+                fill: '#1f2937',
+                fontSize: 13,
+                fontFamily: 'system-ui',
+                fontWeight: 500,
+                dx: -50,
+                dy: 120
+              }}
+              axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+              tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Bar
+              dataKey="count"
+              radius={[4, 4, 0, 0]}
+            >
+              {
+                histogramData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={getBarColor(entry.ratio)} />
+                ))
+              }
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };
