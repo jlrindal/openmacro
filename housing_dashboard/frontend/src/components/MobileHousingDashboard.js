@@ -9,7 +9,7 @@ function Header() {
       <img 
         src="/quantnomics.png"
         alt="Quantnomics Header"
-        className="w-full max-h-[200px] md:max-h-[300px] object-contain"
+        className="w-full max-h-[200px] md:max-h-[150px] object-contain"
       />
     </div>
   );
