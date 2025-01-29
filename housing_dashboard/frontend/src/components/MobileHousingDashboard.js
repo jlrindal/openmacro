@@ -72,26 +72,13 @@ const AffordabilityDistribution = ({ data }) => {
         <span className="font-bold" style={{ color: '#eab308' }}>somewhat affordable</span> or better housing costs, 
         requiring 20% or less of household income.
       </p>
-
-      {/* Legend */}
-      <div className="px-8 pt-6 flex flex-wrap gap-4 justify-center">
-        {legendItems.map((item, index) => (
-          <div key={index} className="flex items-center">
-            <div 
-              className="w-4 h-4 rounded-sm mr-2" 
-              style={{ backgroundColor: item.color }}
-            />
-            <span className="text-sm text-gray-600">{item.label}</span>
-          </div>
-        ))}
-      </div>
       
       {/* Chart container */}
-      <div className="h-[500px] md:h-[600px] p-8">
+      <div className="h-[500px] md:h-[600px] p-8 pb-4">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={histogramData}
-            margin={{ left: 80, right: 50, top: 40, bottom: 60 }}
+            margin={{ left: 80, right: 50, top: 40, bottom: 20 }}
           >
             <CartesianGrid 
               strokeDasharray="2 2" 
@@ -150,6 +137,19 @@ const AffordabilityDistribution = ({ data }) => {
             </Bar>
           </BarChart>
         </ResponsiveContainer>
+      </div>
+
+      {/* Legend moved to bottom */}
+      <div className="px-8 pb-8 flex flex-wrap gap-4 justify-center">
+        {legendItems.map((item, index) => (
+          <div key={index} className="flex items-center">
+            <div 
+              className="w-4 h-4 rounded-sm mr-2" 
+              style={{ backgroundColor: item.color }}
+            />
+            <span className="text-sm text-gray-600">{item.label}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
