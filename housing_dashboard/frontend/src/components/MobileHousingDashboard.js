@@ -25,9 +25,11 @@ const AffordabilityDistribution = ({ data }) => {
 
   // Process data for distribution with more granular bins
   const bins = 30;
-  const allRatios = filteredData.map(item => item.ratio);
-  const minRatio = Math.floor(Math.min(...allRatios));
-  const maxRatio = Math.ceil(Math.max(...allRatios));
+  const allRatios = filteredData.length > 0 
+  ? filteredData.map(item => item.ratio)
+  : [];
+  const minRatio = allRatios.length > 0 ? Math.floor(Math.min(...allRatios)) : 0;
+  const maxRatio = allRatios.length > 0 ? Math.ceil(Math.max(...allRatios)) : 30;
   const binWidth = (maxRatio - minRatio) / bins;
 
   // Calculate percentage of somewhat affordable or better metros
@@ -273,13 +275,16 @@ const MobileHousingDashboard = () => {
   // Get most recent year's data for distribution graph
   const mostRecentYear = Math.max(...data.map(item => new Date(item.date).getFullYear()));
   const mostRecentData = data.reduce((acc, curr) => {
-    const year = new Date(curr.date).getFullYear();
-    if (year === mostRecentYear) {
-      if (!acc[curr.location] || new Date(curr.date) > new Date(acc[curr.location].date)) {
-        acc[curr.location] = curr;
-      }
+  const year = new Date(curr.date).getFullYear();
+  if (year === mostRecentYear) {
+    if (!acc[curr.location] || new Date(curr.date) > new Date(acc[curr.location].date)) {
+      acc[curr.location] = {
+        ...curr,
+        year: year  // Add explicit year field
+      };
     }
-    return acc;
+  }
+  return acc;
   }, {});
   const distributionData = Object.values(mostRecentData);
 
