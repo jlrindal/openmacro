@@ -77,6 +77,22 @@ const MobileHousingDashboard = () => {
     location.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Calculate latest ratios for all locations
+  const latestRatios = data.reduce((acc, curr) => {
+    if (!acc[curr.location] || curr.date > acc[curr.location].date) {
+      acc[curr.location] = { ratio: curr.ratio, date: curr.date };
+    }
+    return acc;
+  }, {});
+
+  const locationsWithRatios = Object.entries(latestRatios).map(([location, { ratio }]) => ({
+    location,
+    ratio,
+  }));
+
+  const mostAffordable = [...locationsWithRatios].sort((a, b) => a.ratio - b.ratio).slice(0, 10);
+  const mostUnaffordable = [...locationsWithRatios].sort((a, b) => b.ratio - a.ratio).slice(0, 10);
+
   const getAffordabilityScore = () => {
     if (filteredData.length === 0) return 1;
     const latestRatio = filteredData[filteredData.length - 1].ratio;
@@ -351,6 +367,32 @@ const MobileHousingDashboard = () => {
           <p className="text-sm md:text-base text-gray-500 font-medium">
             Source: FRED, US Census Bureau
           </p>
+        </div>
+
+        {/* Affordability Lists */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+          <div className="bg-gray-100 rounded-xl p-6">
+            <h3 className="text-xl font-semibold mb-4">Top 10 Most Affordable</h3>
+            <div className="space-y-3">
+              {mostAffordable.map((item, index) => (
+                <div key={index} className="flex justify-between items-center bg-white p-3 rounded-lg">
+                  <span className="font-medium">{item.location}</span>
+                  <span className="text-gray-600">{item.ratio.toFixed(1)}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="bg-gray-100 rounded-xl p-6">
+            <h3 className="text-xl font-semibold mb-4">Top 10 Most Unaffordable</h3>
+            <div className="space-y-3">
+              {mostUnaffordable.map((item, index) => (
+                <div key={index} className="flex justify-between items-center bg-white p-3 rounded-lg">
+                  <span className="font-medium">{item.location}</span>
+                  <span className="text-gray-600">{item.ratio.toFixed(1)}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
