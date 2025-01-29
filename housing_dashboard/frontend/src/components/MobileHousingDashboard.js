@@ -5,190 +5,174 @@ import { Search, MapPin, DollarSign, Home, X } from 'lucide-react';
 import _ from 'lodash';
 
 const AffordabilityDistribution = ({ data }) => {
-  // Parse dates and years
-  const processedData = data.map(item => ({
-    ...item,
-    year: parseInt(item.date.split('-')[0]),
-    ratio: parseFloat(item.ratio.replace('%', ''))
-  }));
-  
-  // Get unique years
-  const years = [...new Set(processedData.map(item => item.year))].sort((a, b) => b - a);
-  const [selectedYear, setSelectedYear] = useState(years[0]);
+ // Get available years and sort them
+ const years = [...new Set(data.map(item => new Date(item.date).getFullYear()))].sort((a, b) => b - a);
+ const [selectedYear, setSelectedYear] = useState(years[0]);  // Start with most recent year
+ 
+ // Filter data for selected year
+ const yearData = data.filter(item => new Date(item.date).getFullYear() === selectedYear);
 
-  // Get latest data for each location in selected year
-  const yearData = Object.values(
-    processedData
-      .filter(item => item.year === selectedYear)
-      .reduce((acc, item) => {
-        if (!acc[item.location] || item.date > acc[item.location].date) {
-          acc[item.location] = item;
-        }
-        return acc;
-      }, {})
-  );
+ // Process data for distribution with more granular bins
+ const bins = 30;
+ const allRatios = yearData.map(item => item.ratio);
+ const minRatio = Math.floor(Math.min(...allRatios));
+ const maxRatio = Math.ceil(Math.max(...allRatios));
+ const binWidth = (maxRatio - minRatio) / bins;
 
-  // Process data for distribution
-  const bins = 30;
-  const allRatios = yearData.map(item => item.ratio);
-  const minRatio = Math.floor(Math.min(...allRatios) || 0);
-  const maxRatio = Math.ceil(Math.max(...allRatios) || 40);
-  const binWidth = (maxRatio - minRatio) / bins;
+ // Calculate percentage of somewhat affordable or better metros
+ const totalMetros = yearData.length;
+ const affordableMetros = yearData.filter(item => item.ratio <= 20).length;
+ const affordablePercentage = ((affordableMetros / totalMetros) * 100).toFixed(1);
 
-  // Calculate percentage of somewhat affordable or better metros
-  const totalMetros = yearData.length;
-  const affordableMetros = yearData.filter(item => item.ratio <= 20).length;
-  const affordablePercentage = totalMetros > 0 ? ((affordableMetros / totalMetros) * 100).toFixed(1) : 0;
+ // Legend data
+ const legendItems = [
+   { label: 'Highly Affordable (≤10%)', color: '#16a34a' },
+   { label: 'Affordable (10-15%)', color: '#22c55e' },
+   { label: 'Somewhat Affordable (15-20%)', color: '#eab308' },
+   { label: 'Low Affordability (20-25%)', color: '#f97316' },
+   { label: 'Very Low Affordability (>25%)', color: '#dc2626' }
+ ];
 
-  // Legend data
-  const legendItems = [
-    { label: 'Highly Affordable (≤10%)', color: '#16a34a' },
-    { label: 'Affordable (10-15%)', color: '#22c55e' },
-    { label: 'Somewhat Affordable (15-20%)', color: '#eab308' },
-    { label: 'Low Affordability (20-25%)', color: '#f97316' },
-    { label: 'Very Low Affordability (>25%)', color: '#dc2626' }
-  ];
+ // Create histogram data
+ const histogramData = _.range(bins).map(i => {
+   const binStart = minRatio + (i * binWidth);
+   const binEnd = binStart + binWidth;
+   const count = allRatios.filter(ratio => ratio >= binStart && ratio < binEnd).length;
+   return {
+     binRange: `${binStart.toFixed(1)}`,  // Simplified to just show start value
+     count,
+     binStart,
+     binEnd,
+     ratio: (binStart + binEnd) / 2 // Middle point for color calculation
+   };
+ });
 
-  // Create histogram data
-  const histogramData = _.range(bins).map(i => {
-    const binStart = minRatio + (i * binWidth);
-    const binEnd = binStart + binWidth;
-    const count = allRatios.filter(ratio => ratio >= binStart && ratio < binEnd).length;
-    return {
-      binRange: `${binStart.toFixed(1)}`,
-      count,
-      binStart,
-      binEnd,
-      ratio: (binStart + binEnd) / 2
-    };
-  });
+ const getBarColor = ratio => {
+   if (ratio <= 10) return '#16a34a';  // Very affordable
+   if (ratio <= 15) return '#22c55e';  // Affordable
+   if (ratio <= 20) return '#eab308';  // Somewhat affordable
+   if (ratio <= 25) return '#f97316';  // Low affordability
+   return '#dc2626';                   // Very low affordability
+ };
 
-  const getBarColor = ratio => {
-    if (ratio <= 10) return '#16a34a';
-    if (ratio <= 15) return '#22c55e';
-    if (ratio <= 20) return '#eab308';
-    if (ratio <= 25) return '#f97316';
-    return '#dc2626';
-  };
+ const CustomTooltip = ({ active, payload }) => {
+   if (active && payload && payload.length) {
+     const data = payload[0].payload;
+     return (
+       <div className="bg-white p-4 shadow-lg border border-gray-100 rounded-lg">
+         <p className="text-gray-600">
+           <span className="font-medium">{data.count}</span> metro areas with{' '}
+           <span className="font-medium">{data.binStart.toFixed(1)}% - {data.binEnd.toFixed(1)}%</span>
+           {' '}ratio
+         </p>
+       </div>
+     );
+   }
+   return null;
+ };
 
-  const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      return (
-        <div className="bg-white p-4 shadow-lg border border-gray-100 rounded-lg">
-          <p className="text-gray-600">
-            <span className="font-medium">{data.count}</span> metro areas with{' '}
-            <span className="font-medium">{data.binStart.toFixed(1)}% - {data.binEnd.toFixed(1)}%</span>
-            {' '}ratio
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
+ return (
+   <div className="mt-8 w-full mx-auto max-w-6xl bg-white rounded-lg border border-gray-100 shadow-sm">
+     {/* Year selector */}
+     <div className="flex justify-end px-8 pt-8">
+       <select
+         value={selectedYear}
+         onChange={(e) => setSelectedYear(Number(e.target.value))}
+         className="px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+       >
+         {years.map(year => (
+           <option key={year} value={year}>{year}</option>
+         ))}
+       </select>
+     </div>
 
-  return (
-    <div className="mt-8 w-full mx-auto max-w-6xl bg-white rounded-lg border border-gray-100 shadow-sm">
-      {/* Year selector */}
-      <div className="flex justify-end px-8 pt-8">
-        <select
-          value={selectedYear}
-          onChange={(e) => setSelectedYear(Number(e.target.value))}
-          className="px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          {years.map(year => (
-            <option key={year} value={year}>{year}</option>
-          ))}
-        </select>
-      </div>
+     {/* Descriptive text */}
+     <p className="text-center px-8 pt-6 text-xl md:text-2xl text-gray-700">
+       In {selectedYear}, <span className="font-bold">{affordablePercentage}%</span> of metro areas have{' '}
+       <span className="font-bold" style={{ color: '#eab308' }}>somewhat affordable</span> or better housing costs, 
+       requiring 20% or less of household income.
+     </p>
+     
+     {/* Chart container */}
+     <div className="h-[500px] md:h-[600px] p-8 pb-4">
+       <ResponsiveContainer width="100%" height="100%">
+         <BarChart
+           data={histogramData}
+           margin={{ left: 80, right: 50, top: 40, bottom: 20 }}
+         >
+           <CartesianGrid 
+             strokeDasharray="2 2" 
+             stroke="#e5e7eb" 
+             vertical={false}
+             strokeWidth={1}
+           />
+           <XAxis
+             dataKey="binRange"
+             stroke="#374151"
+             tick={{ 
+               fill: '#1f2937', 
+               fontSize: 12,
+               fontFamily: 'system-ui',
+               fontWeight: 500 
+             }}
+             interval={2}
+             tickFormatter={(value) => `${value}%`}
+             padding={{ left: 0, right: 0 }}
+             axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+             tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+           />
+           <YAxis
+             stroke="#374151"
+             tick={{ 
+               fill: '#1f2937', 
+               fontSize: 12,
+               fontFamily: 'system-ui',
+               fontWeight: 500,
+               dx: -10
+             }}
+             label={{
+               value: 'Number of Metro Areas',
+               angle: -90,
+               position: 'insideLeft',
+               fill: '#1f2937',
+               fontSize: 13,
+               fontFamily: 'system-ui',
+               fontWeight: 500,
+               dx: -50,
+               dy: 120
+             }}
+             axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+             tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+           />
+           <Tooltip content={<CustomTooltip />} />
+           <Bar
+             dataKey="count"
+             radius={[4, 4, 0, 0]}
+           >
+             {
+               histogramData.map((entry, index) => (
+                 <Cell key={`cell-${index}`} fill={getBarColor(entry.ratio)} />
+               ))
+             }
+           </Bar>
+         </BarChart>
+       </ResponsiveContainer>
+     </div>
 
-      {/* Descriptive text */}
-      <p className="text-center px-8 pt-6 text-xl md:text-2xl text-gray-700">
-        In {selectedYear}, <span className="font-bold">{affordablePercentage}%</span> of metro areas have{' '}
-        <span className="font-bold" style={{ color: '#eab308' }}>somewhat affordable</span> or better housing costs, 
-        requiring 20% or less of household income.
-      </p>
-      
-      {/* Chart container */}
-      <div className="h-[500px] md:h-[600px] p-8 pb-4">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={histogramData}
-            margin={{ left: 80, right: 50, top: 40, bottom: 20 }}
-          >
-            <CartesianGrid 
-              strokeDasharray="2 2" 
-              stroke="#e5e7eb" 
-              vertical={false}
-              strokeWidth={1}
-            />
-            <XAxis
-              dataKey="binRange"
-              stroke="#374151"
-              tick={{ 
-                fill: '#1f2937', 
-                fontSize: 12,
-                fontFamily: 'system-ui',
-                fontWeight: 500 
-              }}
-              interval={2}
-              tickFormatter={(value) => `${value}%`}
-              padding={{ left: 0, right: 0 }}
-              axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
-              tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
-            />
-            <YAxis
-              stroke="#374151"
-              tick={{ 
-                fill: '#1f2937', 
-                fontSize: 12,
-                fontFamily: 'system-ui',
-                fontWeight: 500,
-                dx: -10
-              }}
-              label={{
-                value: 'Number of Metro Areas',
-                angle: -90,
-                position: 'insideLeft',
-                fill: '#1f2937',
-                fontSize: 13,
-                fontFamily: 'system-ui',
-                fontWeight: 500,
-                dx: -50,
-                dy: 120
-              }}
-              axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
-              tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Bar
-              dataKey="count"
-              radius={[4, 4, 0, 0]}
-            >
-              {
-                histogramData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={getBarColor(entry.ratio)} />
-                ))
-              }
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-
-      {/* Legend at bottom */}
-      <div className="px-8 pb-8 flex flex-wrap gap-4 justify-center">
-        {legendItems.map((item, index) => (
-          <div key={index} className="flex items-center">
-            <div 
-              className="w-4 h-4 rounded-sm mr-2" 
-              style={{ backgroundColor: item.color }}
-            />
-            <span className="text-sm text-gray-600">{item.label}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+     {/* Legend at bottom */}
+     <div className="px-8 pb-8 flex flex-wrap gap-4 justify-center">
+       {legendItems.map((item, index) => (
+         <div key={index} className="flex items-center">
+           <div 
+             className="w-4 h-4 rounded-sm mr-2" 
+             style={{ backgroundColor: item.color }}
+           />
+           <span className="text-sm text-gray-600">{item.label}</span>
+         </div>
+       ))}
+     </div>
+   </div>
+ );
 };
 
 function Header() {
