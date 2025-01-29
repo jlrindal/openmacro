@@ -197,8 +197,8 @@ function Header() {
         alt="Quantnomics Header"
         className="w-full max-h-[300px] md:max-h-[150px] object-contain"
       />
-      <div className="w-full h-px bg-gray-200"></div>
-      <div className="text-center py-4 px-4">
+      <div className="w-full h-px bg-gray-200 my-6"></div>
+      <div className="text-center py-8 px-4">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-800 font-serif">
           Can You Afford It? Mortgage Costs by Metro
         </h1>
