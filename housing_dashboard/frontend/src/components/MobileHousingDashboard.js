@@ -69,8 +69,8 @@ const AffordabilityDistribution = ({ data }) => {
       {/* Add descriptive text */}
       <p className="text-center px-8 pt-8 text-xl md:text-2xl text-gray-700">
         In {new Date().getFullYear()}, <span className="font-bold">{affordablePercentage}%</span> of metro areas have{' '}
-        <span className="font-bold" style={{ color: '#eab308' }}>somewhat affordable</span> or better housing costs, 
-        requiring 20% or less of household income.
+        <span className="font-bold" style={{ color: '#eab308' }}>somewhat affordable</span> or better mortgage costs, 
+        requiring 20% or less of gross household income.
       </p>
       
       {/* Chart container */}
