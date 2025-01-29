@@ -7,13 +7,26 @@ import _ from 'lodash';
 const AffordabilityDistribution = ({ data }) => {
   // Get available years and sort them
   const years = [...new Set(data.map(item => new Date(item.date).getFullYear()))].sort((a, b) => b - a);
-  const [selectedYear, setSelectedYear] = useState(years[0]);  // Start with most recent year
+  const [selectedYear, setSelectedYear] = useState(years[0]);
+
+  // Process data for the selected year - get latest data point for each location
+  const yearData = Object.values(data.reduce((acc, item) => {
+    const year = new Date(item.date).getFullYear();
+    if (year === selectedYear) {
+      const location = item.location;
+      // If we haven't seen this location or this is a newer date, update it
+      if (!acc[location] || new Date(item.date) > new Date(acc[location].date)) {
+        acc[location] = {
+          ...item,
+          ratio: parseFloat(item.ratio?.toString().replace('%', '')) || 0
+        };
+      }
+    }
+    return acc;
+  }, {}));
 
   // Process data for distribution with more granular bins
   const bins = 30;
-  
-  // Filter data for selected year
-  const yearData = data.filter(item => new Date(item.date).getFullYear() === selectedYear);
   const allRatios = yearData.map(item => item.ratio);
   const minRatio = Math.floor(Math.min(...allRatios));
   const maxRatio = Math.ceil(Math.max(...allRatios));
