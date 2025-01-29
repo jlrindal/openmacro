@@ -245,7 +245,7 @@ const MobileHousingDashboard = () => {
             <span className="font-bold" style={{ color: getLineColor() }}>
               {filteredData[filteredData.length - 1].ratio.toFixed(1)}%
             </span>{' '}
-            of their monthly income on the mortgage.
+            of their gross monthly income on the mortgage.
           </p>
         )}
 
