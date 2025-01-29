@@ -5,8 +5,8 @@ import { Search, MapPin, DollarSign, Home, X } from 'lucide-react';
 import _ from 'lodash';
 
 const AffordabilityDistribution = ({ data }) => {
-  // Process data for distribution
-  const bins = 20;
+  // Process data for distribution with more granular bins
+  const bins = 30; // Increased number of bins
   const allRatios = data.map(item => item.ratio);
   const minRatio = Math.floor(Math.min(...allRatios));
   const maxRatio = Math.ceil(Math.max(...allRatios));
@@ -18,23 +18,31 @@ const AffordabilityDistribution = ({ data }) => {
     const binEnd = binStart + binWidth;
     const count = allRatios.filter(ratio => ratio >= binStart && ratio < binEnd).length;
     return {
-      binRange: `${binStart.toFixed(1)}-${binEnd.toFixed(1)}`,
+      binRange: `${binStart.toFixed(1)}`,  // Simplified to just show start value
       count,
       binStart,
-      binEnd
+      binEnd,
+      ratio: (binStart + binEnd) / 2 // Middle point for color calculation
     };
   });
+
+  const getBarColor = ratio => {
+    if (ratio <= 10) return '#16a34a';  // Very affordable
+    if (ratio <= 15) return '#22c55e';  // Affordable
+    if (ratio <= 20) return '#eab308';  // Somewhat affordable
+    if (ratio <= 25) return '#f97316';  // Low affordability
+    return '#dc2626';                   // Very low affordability
+  };
 
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
         <div className="bg-white p-4 shadow-lg border border-gray-100 rounded-lg">
-          <p className="font-semibold text-gray-800 mb-2">
-            {`${data.binStart.toFixed(1)}% - ${data.binEnd.toFixed(1)}%`}
-          </p>
           <p className="text-gray-600">
-            <span className="font-medium">{data.count}</span> metro areas
+            <span className="font-medium">{data.count}</span> metro areas with{' '}
+            <span className="font-medium">{data.binStart.toFixed(1)}% - {data.binEnd.toFixed(1)}%</span>
+            {' '}ratio
           </p>
         </div>
       );
@@ -43,7 +51,7 @@ const AffordabilityDistribution = ({ data }) => {
   };
 
   return (
-    <div className="w-full h-[400px] mt-6">
+    <div className="w-full h-[500px] md:h-[600px] bg-white p-8 rounded-lg border border-gray-100 shadow-sm">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={histogramData}
@@ -64,10 +72,8 @@ const AffordabilityDistribution = ({ data }) => {
               fontFamily: 'system-ui',
               fontWeight: 500 
             }}
-            interval={1}
-            angle={-45}
-            textAnchor="end"
-            height={80}
+            interval={2}  // Show every third value
+            tickFormatter={(value) => `${value}%`}
             padding={{ left: 0, right: 0 }}
             axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
             tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
@@ -98,9 +104,14 @@ const AffordabilityDistribution = ({ data }) => {
           <Tooltip content={<CustomTooltip />} />
           <Bar
             dataKey="count"
-            fill="#60a5fa"
             radius={[4, 4, 0, 0]}
-          />
+          >
+            {
+              histogramData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={getBarColor(entry.ratio)} />
+              ))
+            }
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
     </div>
@@ -514,8 +525,7 @@ const MobileHousingDashboard = () => {
           </div>
 
           {/* Distribution Graph */}
-          <div className="bg-gray-100 rounded-xl p-6 mt-6">
-            <h3 className="text-xl font-semibold mb-4">Distribution of Housing Affordability ({mostRecentYear})</h3>
+          <div className="mt-8">
             <AffordabilityDistribution data={distributionData} />
           </div>
         </div>
