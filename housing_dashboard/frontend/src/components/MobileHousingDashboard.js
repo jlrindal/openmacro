@@ -192,7 +192,7 @@ function Header() {
       />
       <div className="w-full h-px bg-gray-200 my-6"></div>
       <div className="text-center py-8 px-4">
-        <h1 className="text-3xl md:text-6xl text-gray-800 font-serif">
+        <h1 className="text-6xl md:text-8xl text-gray-800 font-serif">
           Can <span className="font-extrabold italic">YOU</span> Afford It? Mortgage Costs by City
         </h1>
       </div>
