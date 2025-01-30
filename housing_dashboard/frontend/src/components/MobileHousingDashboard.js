@@ -626,7 +626,10 @@ const MobileHousingDashboard = () => {
         <div className="mt-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-100 rounded-xl p-6">
-              <h3 className="text-xl font-semibold mb-4">Top 10 Most Affordable</h3>
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-semibold">Top 10 Most Affordable</h3>
+                <span className="text-gray-600">Share of Income</span>
+              </div>
               <div className="space-y-3">
                 {mostAffordable.map((item, index) => (
                   <div key={index} className="flex justify-between items-center bg-white p-3 rounded-lg">
@@ -637,7 +640,10 @@ const MobileHousingDashboard = () => {
               </div>
             </div>
             <div className="bg-gray-100 rounded-xl p-6">
-              <h3 className="text-xl font-semibold mb-4">Top 10 Most Unaffordable</h3>
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-semibold">Top 10 Most Unaffordable</h3>
+                <span className="text-gray-600">Share of Income</span>
+              </div>
               <div className="space-y-3">
                 {mostUnaffordable.map((item, index) => (
                   <div key={index} className="flex justify-between items-center bg-white p-3 rounded-lg">
