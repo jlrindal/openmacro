@@ -205,7 +205,7 @@ const MobileHousingDashboard = () => {
   const [selectedLocation, setSelectedLocation] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [locations, setLocations] = useState([]);
-  const [outlineColor, setOutlineColor] = useState('#FFD700');
+  const [outlineColor, setOutlineColor] = useState('#492e90');
   const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
@@ -251,11 +251,11 @@ const MobileHousingDashboard = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setOutlineColor((prevColor) => (prevColor === '#FFD700' ? '#00BFFF' : '#FFD700'));
-    }, 2000);
+      setOutlineColor((prevColor) => (prevColor === '#492e90' ? '#000000' : '#492e90'));
+    }, 4000);
 
     return () => clearInterval(interval);
-  }, []);
+ }, []);
 
   const filteredData = data.filter(item => item.location === selectedLocation);
   const filteredLocations = locations.filter(location =>
