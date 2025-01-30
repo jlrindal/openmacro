@@ -328,8 +328,8 @@ const MobileHousingDashboard = () => {
     return '#dc2626';
   };
 
-  const nationalAverageRatio = distributionData.length
-    ? (distributionData.reduce((sum, item) => sum + item.ratio, 0) / distributionData.length).toFixed(1)
+  const averageRatio = filteredData.length 
+    ? (filteredData.reduce((sum, item) => sum + item.ratio, 0) / filteredData.length).toFixed(1)
     : 0;
 
   const latestDataPoint = filteredData.length > 0
@@ -551,11 +551,11 @@ const MobileHousingDashboard = () => {
               <Tooltip content={<CustomTooltip />} />
                 
                 <ReferenceLine 
-                    y={parseFloat(nationalAverageRatio)} 
+                    y={parseFloat(averageRatio)} 
                     stroke="#6B7280" 
                     strokeDasharray="3 3"
                     label={{
-                        value: `National Average (${nationalAverageRatio}%)`,
+                        value: `Average (${averageRatio}%)`,
                         position: 'right',
                         style: {
                             fill: '#6B7280',
@@ -563,7 +563,7 @@ const MobileHousingDashboard = () => {
                             fontSize: 12,
                         }
                     }}
-                />        
+                />  
                 <Line
                 type="monotone"
                 dataKey="ratio"
