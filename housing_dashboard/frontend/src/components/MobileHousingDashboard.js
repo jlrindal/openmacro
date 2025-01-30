@@ -320,21 +320,10 @@ const MobileHousingDashboard = () => {
   const mostAffordable = [...locationsWithRatios].sort((a, b) => a.ratio - b.ratio).slice(0, 10);
   const mostUnaffordable = [...locationsWithRatios].sort((a, b) => b.ratio - a.ratio).slice(0, 10);
 
-  const mostRecentYear = Math.max(...data.map(item => new Date(item.date).getFullYear()));
-  const mostRecentData = data.reduce((acc, curr) => {
-    const year = new Date(curr.date).getFullYear();
-    if (year === mostRecentYear) {
-      if (!acc[curr.location] || new Date(curr.date) > new Date(acc[curr.location].date)) {
-        acc[curr.location] = {
-          ...curr,
-          year: year
-        };
-      }
-    }
-    return acc;
-  }, {});
-  
-  const distributionData = Object.values(mostRecentData);
+  const distributionData = data.map(item => ({
+    ...item,
+    year: new Date(item.date).getFullYear()
+  }));
 
   const getAffordabilityScore = () => {
     if (filteredData.length === 0) return 1;
