@@ -236,10 +236,10 @@ function Header() {
           Mortgage Costs by City
         </h2>
         
-        {/* Fixed Starbucks blurb section */}
-        <div className="py-8">
-          <div className="border-t border-b border-gray-200 py-8">
-            <div className="max-w-5xl mx-auto px-4">
+        {/* Fixed  blurb section */}
+        <div className="py-8"
+          <div className="max-w-5xl mx-auto px-4">
+            <div className="border-t border-b border-gray-200 py-8">
               <p className="text-xl md:text-xl text-gray-600 leading-relaxed font-serif text-center">
                 The American Dream has drifted further and further out of reach for most Americans. Here's a reality check—cutting out that daily Starbucks ☕️ won't make up the difference between your income and today's housing costs.
               </p>
