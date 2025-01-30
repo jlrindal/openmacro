@@ -211,7 +211,7 @@ function Header() {
       </div>
       
       <div className="text-center py-8 px-4">
-        <p className="text-xl md:text-2xl text-gray-500 font-serif mb-4">Housing Data: Affordability</p>
+        <p className="text-xl md:text-xl text-gray-500 mb-4">Housing Data: Affordability</p>
         <h1 className="text-5xl md:text-7xl text-gray-800 font-serif whitespace-nowrap">
           Can <span className="font-extrabold italic">YOU</span> Afford It?
         </h1>
@@ -482,13 +482,14 @@ const MobileHousingDashboard = () => {
           <div className="md:col-span-1">
             <div className="bg-gray-100 rounded-xl p-6 text-center h-full flex flex-col justify-between">
               <div>
+                <h3 className="text-lg font-semibold mb-2">Affordability Score</h3>
                 <span className="font-bold text-gray-800 text-4xl md:text-5xl">
                   {score}
                 </span>
                 <span className="font-bold text-gray-500 text-2xl md:text-3xl">
                   {' '}/ 10
                 </span>
-                <p className="text-gray-600 mt-2 text-xl md:text-lg">
+                <p className="text-gray-800 font-bold">
                   {score >= 9 ? 'Highly Affordable' :
                    score >= 7 ? 'Affordable' :
                    score >= 5 ? 'Somewhat Affordable' :
