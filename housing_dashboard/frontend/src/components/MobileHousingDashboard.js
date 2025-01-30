@@ -235,10 +235,13 @@ function Header() {
         <h2 className="text-5xl md:text-7xl text-gray-800 font-serif mt-4">
           Mortgage Costs by City
         </h2>
-        <p className="mt-8 text-xl md:text-xl text-gray-600 max-w-5xl mx-auto leading-relaxed font-serif">
-          The American Dream has drifted further and further out of reach for most Americans. Here's a reality check—cutting out that daily Starbucks ☕️ won't make up the difference between your income and today's housing costs.
-        </p>
-      </div>
+        <div className="border-t border-b border-gray-200 py-8">
+          <div className="max-w-5xl mx-auto px-4">
+            <p className="text-xl md:text-xl text-gray-600 leading-relaxed font-serif text-center">
+              The American Dream has drifted further and further out of reach for most Americans. Here's a reality check—cutting out that daily Starbucks ☕️ won't make up the difference between your income and today's housing costs.
+            </p>
+          </div>
+        </div>
     </>
   );
 }
