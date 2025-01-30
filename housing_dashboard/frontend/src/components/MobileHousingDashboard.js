@@ -218,7 +218,7 @@ function Header() {
           Mortgage Costs by City
         </h2>
         <p className="mt-8 text-xl md:text-xl text-gray-600 max-w-5xl mx-auto leading-relaxed font-serif">
-          The American Dream has drifted further and further out of reach for most Americans. Here's a reality check—cutting out that daily Starbucks won't make up the difference between your income and today's housing costs.
+          The American Dream has drifted further and further out of reach for most Americans. Here's a reality check—cutting out that daily Starbucks ☕️ won't make up the difference between your income and today's housing costs.
         </p>
       </div>
     </>
