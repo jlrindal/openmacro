@@ -198,7 +198,7 @@ function Header() {
   return (
     <>
       <div className={`w-full sticky top-0 bg-white z-10 transition-all duration-300 ${
-        isScrolled ? 'h-16' : 'h-28'
+        isScrolled ? 'h-16' : 'h-24'
       }`}>
         <img 
           src="/quantnomics.png"
