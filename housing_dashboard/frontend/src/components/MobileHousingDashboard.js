@@ -189,7 +189,7 @@ function Header() {
         <img 
           src="/quantnomics.png"
           alt="Quantnomics Header"
-          className="w-full max-h-[200px] md:max-h-[125px] object-contain"
+          className="w-full max-h-[125px] md:max-h-[100px] object-contain"
         />
         <div className="w-full h-px bg-gray-200 my-6"></div>
       </div>
@@ -198,7 +198,7 @@ function Header() {
         <h1 className="text-6xl md:text-8xl text-gray-800 font-serif whitespace-nowrap">
           Can <span className="font-extrabold italic">YOU</span> Afford It?
         </h1>
-        <h2 className="text-4xl md:text-6xl text-gray-800 font-serif mt-4">
+        <h2 className="text-6xl md:text-8xl text-gray-800 font-serif mt-4">
           Mortgage Costs by City
         </h2>
       </div>
