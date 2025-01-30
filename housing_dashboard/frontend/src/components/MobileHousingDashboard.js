@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Cell, Bar } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Cell, Bar, ReferenceLine } from 'recharts';
 import { Search, MapPin, DollarSign, Home, X } from 'lucide-react';
 import _ from 'lodash';
 
@@ -545,7 +545,22 @@ const MobileHousingDashboard = () => {
                 tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
               />
               <Tooltip content={<CustomTooltip />} />
-              <Line
+                
+                <ReferenceLine 
+                  y={20} 
+                  stroke="#6B7280" 
+                  strokeDasharray="3 3"
+                  label={{
+                    value: "Average",
+                    position: 'right',
+                    style: {
+                      fill: '#6B7280',
+                      fontStyle: 'italic',
+                      fontSize: 12,
+                    }
+                  }}
+                />                
+                <Line
                 type="monotone"
                 dataKey="ratio"
                 stroke={getLineColor()}
