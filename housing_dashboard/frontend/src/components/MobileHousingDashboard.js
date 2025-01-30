@@ -413,14 +413,14 @@ const MobileHousingDashboard = () => {
           </div>
 
           <div
-            className="bg-gray-100 rounded-xl p-6 flex items-center justify-center relative overflow-hidden h-16"
+            className="bg-gray-100 rounded-xl p-6 flex items-center relative overflow-hidden h-16"
             style={{
               border: `4px solid ${outlineColor}`,
               transition: 'border-color 0.5s ease',
             }}
           >
-            <MapPin size={32} className="mr-4 text-gray-600" />
-            <div className="flex-1 text-center">
+            <MapPin size={32} className="shrink-0 text-gray-600" />
+            <div className="flex-1 flex justify-center items-center px-4">
               <p className="text-lg md:text-xl truncate font-semibold">{selectedLocation}</p>
             </div>
           </div>
