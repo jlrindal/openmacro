@@ -619,7 +619,7 @@ const MobileHousingDashboard = () => {
 
         <div className="mt-12 mb-12">
           <p className="mt-8 text-xl md:text-xl text-gray-600 max-w-5xl mx-auto leading-relaxed font-serif text-center">
-            Looking at those numbers like "this is fine" while your savings account weeps? Same. Let's check out where your hard-earned dollars might actually get you a home (without needing to inherit a small fortune or discover you're secretly an heir to a tech empire). Here's the scoop on which cities are still somewhat in reach and which ones... well, let's just say even your great-great-grandchildren's trust funds might need trust funds. 💀
+            Looking at those numbers like "this is fine" while your savings account weeps? Same. Let's check out where your hard-earned dollars might actually get you a home (without needing to inherit a small fortune). Here's the scoop on which cities are still somewhat in reach and which ones... well, let's just say even your great-great-grandchildren's trust funds might need trust funds.
           </p>
         </div>
 
@@ -651,7 +651,7 @@ const MobileHousingDashboard = () => {
 
           <div className="mt-12 mb-12">
             <p className="mt-8 text-xl md:text-xl text-gray-600 max-w-5xl mx-auto leading-relaxed font-serif text-center">
-              But wait, there's more! Let's zoom out and look at the bigger picture. Here's how ALL metro areas stack up against each other. Spoiler alert: it's giving housing crisis, bestie. 🏠📊 Think of it as a housing affordability family photo—some relatives are thriving, others... not so much.
+              But wait, there's more! Let's zoom out and look at the bigger picture. Here's how ALL metro areas stack up against each other. Spoiler alert: it's giving housing crisis. 🏠📊
             </p>
           </div>       
 
