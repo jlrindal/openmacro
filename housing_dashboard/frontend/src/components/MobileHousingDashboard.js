@@ -647,6 +647,12 @@ const MobileHousingDashboard = () => {
             </div>
           </div>
 
+          <div className="mt-12 mb-12">
+            <p className="mt-8 text-xl md:text-xl text-gray-600 max-w-5xl mx-auto leading-relaxed font-serif text-center">
+              But wait, there's more! Let's zoom out and look at the bigger picture. Here's how ALL metro areas stack up against each other. Spoiler alert: it's giving housing crisis, bestie. 🏠📊 Think of it as a housing affordability family photo—some relatives are thriving, others... not so much.
+            </p>
+          </div>       
+
           <div className="mt-8">
             <AffordabilityDistribution data={distributionData} />
           </div>
