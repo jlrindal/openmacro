@@ -615,6 +615,12 @@ const MobileHousingDashboard = () => {
           </p>
         </div>
 
+        <div className="mt-12 mb-12">
+          <p className="text-xl md:text-2xl text-gray-700 text-center max-w-5xl mx-auto leading-relaxed font-serif">
+            Looking at those numbers like "this is fine" while your savings account weeps? Same. Let's check out where your hard-earned dollars might actually get you a home (without needing to inherit a small fortune or discover you're secretly an heir to a tech empire). Here's the scoop on which cities are still somewhat in reach and which ones... well, let's just say even your great-great-grandchildren's trust funds might need trust funds. 💀
+          </p>
+        </div>
+
         <div className="mt-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-100 rounded-xl p-6">
