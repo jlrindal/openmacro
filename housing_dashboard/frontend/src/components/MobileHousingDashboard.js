@@ -183,15 +183,33 @@ const AffordabilityDistribution = ({ data }) => {
 };
 
 function Header() {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      setIsScrolled(scrollPosition > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <>
       <div className="w-full sticky top-0 bg-white z-10">
         <img 
           src="/quantnomics.png"
           alt="Quantnomics Header"
-          className="w-full max-h-[125px] md:max-h-[100px] object-contain"
+          className={`w-full transition-all duration-300 ${
+            isScrolled 
+              ? 'max-h-[60px] md:max-h-[40px]'  // Smaller height when scrolled
+              : 'max-h-[100px] md:max-h-[80px]'  // Initial height (reduced from your original)
+          }`}
         />
-        <div className="w-full h-px bg-gray-200 my-6"></div>
+        <div className={`w-full h-px bg-gray-200 transition-all duration-300 ${
+          isScrolled ? 'my-2' : 'my-4'
+        }`}></div>
       </div>
       
       <div className="text-center py-8 px-4">
