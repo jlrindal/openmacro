@@ -623,10 +623,12 @@ const MobileHousingDashboard = () => {
           </p>
         </div>
 
-        <div className="mt-12 mb-12">
-          <p className="mt-8 text-xl md:text-xl text-gray-600 max-w-5xl mx-auto leading-relaxed font-serif text-center">
-            Looking at those numbers like "this is fine" while your savings account weeps? Same. Let's check out where your hard-earned dollars might actually get you a home (without needing to inherit a small fortune). Here's the scoop on which cities are still somewhat in reach and which ones... well, let's just say even your great-great-grandchildren's trust funds might need trust funds.
-          </p>
+        <div className="mt-12 mb-12 border-t border-b border-gray-200 py-8">
+          <div className="max-w-5xl mx-auto px-4">
+            <p className="text-xl md:text-xl text-gray-600 leading-relaxed font-serif text-center">
+              Looking at those numbers like "this is fine" while your savings account weeps? Same. Let's check out where your hard-earned dollars might actually get you a home...
+            </p>
+          </div>
         </div>
 
         <div className="mt-8">
@@ -661,11 +663,13 @@ const MobileHousingDashboard = () => {
             </div>
           </div>
 
-          <div className="mt-12 mb-12">
-            <p className="mt-8 text-xl md:text-xl text-gray-600 max-w-5xl mx-auto leading-relaxed font-serif text-center">
-              But wait, there's more! Let's zoom out and look at the bigger picture. Here's how ALL metro areas stack up against each other. Spoiler alert: it's giving housing crisis. 🏠📊
-            </p>
-          </div>       
+          <div className="mt-12 mb-12 border-t border-b border-gray-200 py-8">
+            <div className="max-w-5xl mx-auto px-4">
+              <p className="text-xl md:text-xl text-gray-600 leading-relaxed font-serif text-center">
+                But wait, there's more! Let's zoom out and look at the bigger picture...
+              </p>
+            </div>
+          </div>    
 
           <div className="mt-8">
             <AffordabilityDistribution data={distributionData} />
