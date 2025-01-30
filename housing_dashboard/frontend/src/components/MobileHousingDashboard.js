@@ -5,10 +5,27 @@ import { Search, MapPin, DollarSign, Home, X } from 'lucide-react';
 import _ from 'lodash';
 
 const AffordabilityDistribution = ({ data }) => {
-  const availableYears = data.length 
-    ? [...new Set(data.map(item => item.year))].sort((a, b) => b - a) 
-    : [];
-  
+  // Group data by year and location to get the latest data point for each location in each year
+  const yearlyData = data.reduce((acc, curr) => {
+    const year = curr.year;
+    if (!acc[year]) {
+      acc[year] = {};
+    }
+    if (!acc[year][curr.location] || new Date(curr.date) > new Date(acc[year][curr.location].date)) {
+      acc[year][curr.location] = curr;
+    }
+    return acc;
+  }, {});
+
+  // Convert the grouped data back to array format for each year
+  const processedData = Object.entries(yearlyData).map(([year, locations]) => 
+    Object.values(locations).map(item => ({
+      ...item,
+      year: parseInt(year)
+    }))
+  ).flat();
+
+  const availableYears = [...new Set(processedData.map(item => item.year))].sort((a, b) => b - a);
   const [selectedYear, setSelectedYear] = useState(availableYears[0] || null);
 
   useEffect(() => {
