@@ -237,7 +237,7 @@ function Header() {
         </h2>
         
         {/* Fixed  blurb section */}
-        <div className="py-8"
+        <div className="py-8">
           <div className="max-w-5xl mx-auto px-4">
             <div className="border-t border-b border-gray-200 py-8">
               <p className="text-xl md:text-xl text-gray-600 leading-relaxed font-serif text-center">
