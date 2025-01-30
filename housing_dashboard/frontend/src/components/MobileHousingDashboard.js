@@ -197,15 +197,13 @@ function Header() {
 
   return (
     <>
-      <div className="w-full sticky top-0 bg-white z-10">
+      <div className={`w-full sticky top-0 bg-white z-10 transition-all duration-300 ${
+        isScrolled ? 'h-16' : 'h-32'
+      }`}>
         <img 
           src="/quantnomics.png"
           alt="Quantnomics Header"
-          className={`w-full transition-all duration-300 ${
-            isScrolled 
-              ? 'max-h-[60px] md:max-h-[40px]'  // Smaller height when scrolled
-              : 'max-h-[100px] md:max-h-[80px]'  // Initial height (reduced from your original)
-          }`}
+          className="w-full h-full object-contain"
         />
         <div className={`w-full h-px bg-gray-200 transition-all duration-300 ${
           isScrolled ? 'my-2' : 'my-4'
