@@ -328,6 +328,10 @@ const MobileHousingDashboard = () => {
     return '#dc2626';
   };
 
+  const averageRatio = filteredData.length 
+    ? (filteredData.reduce((sum, item) => sum + item.ratio, 0) / filteredData.length).toFixed(1)
+    : 0;
+
   const latestDataPoint = filteredData.length > 0
     ? filteredData[filteredData.length - 1]
     : null;
@@ -547,19 +551,19 @@ const MobileHousingDashboard = () => {
               <Tooltip content={<CustomTooltip />} />
                 
                 <ReferenceLine 
-                  y={20} 
-                  stroke="#6B7280" 
-                  strokeDasharray="3 3"
-                  label={{
-                    value: "Average",
-                    position: 'right',
-                    style: {
-                      fill: '#6B7280',
-                      fontStyle: 'italic',
-                      fontSize: 12,
-                    }
-                  }}
-                />                
+                    y={parseFloat(averageRatio)} 
+                    stroke="#6B7280" 
+                    strokeDasharray="3 3"
+                    label={{
+                        value: `Average (${averageRatio}%)`,
+                        position: 'right',
+                        style: {
+                            fill: '#6B7280',
+                            fontStyle: 'italic',
+                            fontSize: 12,
+                        }
+                    }}
+                />            
                 <Line
                 type="monotone"
                 dataKey="ratio"
