@@ -188,7 +188,7 @@ function Header() {
       <img 
         src="/quantnomics.png"
         alt="Quantnomics Header"
-        className="w-full max-h-[200px] md:max-h-[150px] object-contain"
+        className="w-full max-h-[200px] md:max-h-[100px] object-contain"
       />
       <div className="w-full h-px bg-gray-200 my-6"></div>
       <div className="text-center py-8 px-4">
