@@ -96,7 +96,7 @@ const AffordabilityDistribution = ({ data }) => {
         <>
           <div className="px-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-xl md:text-2xl text-gray-700 text-center md:text-left">
-              In {selectedYear}, <span className="font-bold">{affordablePercentage}%</span> of metro areas have{' '}
+              In {selectedYear}, <span className="font-bold">{affordablePercentage}%</span> of metro areas had{' '}
               <span className="font-bold" style={{ color: '#eab308' }}>somewhat affordable</span> or better housing costs, 
               requiring 20% or less of household income.
             </p>
