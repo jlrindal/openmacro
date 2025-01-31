@@ -237,7 +237,7 @@ function Header() {
         </h2>
 
         {/* Author and LinkedIn section */}
-        <div className="mt-4 mb-4">
+        <div className="mt-6 mb-4">
           <div className="flex items-center justify-center gap-4">
             <p className="text-xl text-gray-600">By: Jeremy Rindal</p>
             <a 
@@ -257,7 +257,7 @@ function Header() {
         {/* Fixed  blurb section */}
         <div className="pt-8 pt-4">
           <div className="max-w-5xl mx-auto px-4">
-            <div className="border-t border-b border-gray-200 py-8">
+            <div className="border-t border-b border-gray-200 py-6">
               <p className="text-xl md:text-xl text-gray-600 leading-relaxed font-serif text-center">
                 The American Dream has drifted further and further out of reach for most Americans. Here's a reality check—cutting out that daily Starbucks ☕️ won't make up the difference between your income and today's housing costs.
               </p>
