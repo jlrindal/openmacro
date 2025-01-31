@@ -233,7 +233,7 @@ function Header() {
           Can <span className="font-extrabold italic">YOU</span> Afford It?
         </h1>
         <h2 className="text-5xl md:text-7xl text-gray-800 font-serif mt-4">
-          Mortgage Costs by City
+          Housing Costs by City
         </h2>
 
         {/* Author and LinkedIn section */}
