@@ -673,7 +673,7 @@ const MobileHousingDashboard = () => {
           <div className="mt-12 mb-12 border-t border-b border-gray-200 py-8">
             <div className="max-w-5xl mx-auto px-4">
               <p className="text-xl md:text-xl text-gray-600 leading-relaxed font-serif text-center">
-                The housing market is cooked. Let's look at how affordability breaks down across the entire country
+                Housing affordability varies dramatically across metropolitan areas, from peaceful cornfield-adjacent communities to cities where even tech millionaires feel poor. Let's examine these market extremes to understand the full spectrum of housing costs in America
               </p>
             </div>
           </div>    
