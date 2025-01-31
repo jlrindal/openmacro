@@ -633,7 +633,7 @@ const MobileHousingDashboard = () => {
         <div className="mt-12 mb-12 border-t border-b border-gray-200 py-8">
           <div className="max-w-5xl mx-auto px-4">
             <p className="text-xl md:text-xl text-gray-600 leading-relaxed font-serif text-center">
-              Looking at those numbers like "this is fine" while your savings account weeps? Same. Let's check out where your hard-earned dollars might actually get you a home...
+              Here are the metros where your money goes further (yes, there might be a cornfield involved)... and the ones where you'll need to win the lottery first.
             </p>
           </div>
         </div>
@@ -673,7 +673,7 @@ const MobileHousingDashboard = () => {
           <div className="mt-12 mb-12 border-t border-b border-gray-200 py-8">
             <div className="max-w-5xl mx-auto px-4">
               <p className="text-xl md:text-xl text-gray-600 leading-relaxed font-serif text-center">
-                But wait, there's more! Let's zoom out and look at the bigger picture...
+                The housing market is cooked. Let's look at how affordability breaks down across the entire country
               </p>
             </div>
           </div>    
