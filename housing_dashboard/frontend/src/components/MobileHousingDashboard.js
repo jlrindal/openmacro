@@ -303,7 +303,7 @@ const MobileHousingDashboard = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setOutlineColor((prevColor) => (prevColor === '#492e90' ? '#000000' : '#492e90'));
-    }, 4000);
+    }, 2000);
 
     return () => clearInterval(interval);
  }, []);
