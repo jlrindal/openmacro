@@ -410,7 +410,6 @@ const MobileHousingDashboard = () => {
     <div className="min-h-screen bg-white text-gray-800">
       <Header />
       <div className="p-4 md:max-w-6xl md:mx-auto md:px-8 relative">
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent pointer-events-none animate-pulse"></div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div className="relative">
             <div className="flex items-center bg-gray-100 rounded-lg border border-gray-200 h-16 relative">
