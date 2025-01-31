@@ -228,7 +228,7 @@ function Header() {
       </div>
       
       <div className="text-center py-8 px-4">
-        <p className="text-lg md:text-lg text-gray-500 mb-4">Housing Data: Affordability</p>
+        <p className="text-base md:text-base text-gray-500 mb-4">Housing Data: Affordability</p>
         <h1 className="text-5xl md:text-7xl text-gray-800 font-serif whitespace-nowrap">
           Can <span className="font-extrabold italic">YOU</span> Afford It?
         </h1>
