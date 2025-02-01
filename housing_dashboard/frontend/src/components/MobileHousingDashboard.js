@@ -276,7 +276,6 @@ const MobileHousingDashboard = () => {
   const [locations, setLocations] = useState([]);
   const [outlineColor, setOutlineColor] = useState('#492e90');
   const [showDropdown, setShowDropdown] = useState(false);
-  const [rankingsYear, setRankingsYear] = useState(currentYear);
 
   useEffect(() => {
     const loadData = async () => {
@@ -407,6 +406,8 @@ const MobileHousingDashboard = () => {
   const currentYear = latestDataPoint
     ? new Date(latestDataPoint.date).getFullYear()
     : new Date().getFullYear();
+
+    const [rankingsYear, setRankingsYear] = useState(currentYear);
 
   const currentMedianHHI = latestDataPoint?.median_hhi || 0;
   const currentListingPrice = latestDataPoint?.median_price || 0;
