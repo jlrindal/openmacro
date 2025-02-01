@@ -95,7 +95,7 @@ const AffordabilityDistribution = ({ data }) => {
             <p className="text-xl md:text-2xl text-gray-700 text-center md:text-left">
               In {selectedYear}, <span className="font-bold">{affordablePercentage}%</span> of metro areas had{' '}
               <span className="font-bold" style={{ color: '#eab308' }}>somewhat affordable</span> or better housing costs, 
-              requiring 20% or less of household income. <span className="hidden">Quantnomics housing affordability analysis</span>
+              requiring 20% or less of household income.
             </p>
             <select 
               value={selectedYear || ''}
@@ -225,11 +225,6 @@ function Header() {
       </div>
       
       <div className="text-center py-8 px-4">
-        <div className="hidden">
-          <h1>Quantnomics Housing Affordability Dashboard</h1>
-          <p>Interactive analysis of housing affordability trends across US metropolitan areas</p>
-        </div>
-
         <h1 className="text-5xl md:text-7xl text-gray-800 font-serif whitespace-nowrap">
           Can <span className="font-extrabold italic">YOU</span> Afford It?
         </h1>
@@ -239,7 +234,7 @@ function Header() {
 
         <div className="mt-8 mb-1">
           <div className="flex items-center justify-center gap-4">
-            <p className="text-base text-gray-600">Quantnomics Analysis by Jeremy Rindal</p>
+            <p className="text-base text-gray-600">Jeremy Rindal</p>
             <a 
               href="https://www.linkedin.com/in/jeremy-r-a11312193/" 
               target="_blank" 
@@ -258,7 +253,7 @@ function Header() {
           <div className="max-w-5xl mx-auto px-4">
             <div className="border-t border-b border-gray-200 py-6">
               <p className="text-xl md:text-xl text-gray-600 leading-relaxed font-serif text-center">
-                The American Dream has drifted further and further out of reach for most Americans. Here's a reality check—cutting out that daily Starbucks ☕️ won't make up the difference between your income and today's housing costs. <span className="hidden">Quantnomics housing affordability data analysis</span>
+                The American Dream has drifted further and further out of reach for most Americans. Here's a reality check—cutting out that daily Starbucks ☕️ won't make up the difference between your income and today's housing costs.
               </p>
             </div>
           </div>
@@ -435,23 +430,24 @@ const MobileHousingDashboard = () => {
     return null;
   };
 
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Dataset",
-    "name": "Quantnomics Housing Affordability Data",
-    "description": "Comprehensive analysis of housing affordability metrics across US metropolitan areas",
-    "keywords": "housing affordability, real estate trends, mortgage costs, income ratios",
-    "publisher": {
-      "@type": "Organization",
-      "name": "Quantnomics"
-    }
-  };
-
   return (
     <div className="min-h-screen bg-white text-gray-800">
-      <script type="application/ld+json">
-        {JSON.stringify(structuredData)}
-      </script>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Dataset",
+            "name": "Quantnomics Housing Affordability Data",
+            "description": "Comprehensive housing affordability metrics and analysis across US metropolitan areas",
+            "keywords": "housing affordability, real estate trends, mortgage rates, income ratios",
+            "publisher": {
+              "@type": "Organization",
+              "name": "Quantnomics"
+            }
+          })
+        }}
+      />
 
       <Header />
       <div className="p-4 md:max-w-6xl md:mx-auto md:px-8 relative">
@@ -574,7 +570,7 @@ const MobileHousingDashboard = () => {
             <span className="font-bold" style={{ color: getLineColor() }}>
               {filteredData[filteredData.length - 1].ratio.toFixed(1)}%
             </span>{' '}
-            of their gross monthly income on the mortgage. <span className="hidden">Quantnomics housing affordability data</span>
+            of their gross monthly income on the mortgage.
           </p>
         )}
 
@@ -671,7 +667,7 @@ const MobileHousingDashboard = () => {
             * Excludes property taxes, insurance, and other housing costs
           </p>
           <p className="text-sm md:text-base text-gray-500 font-medium">
-            Source: Quantnomics analysis of FRED, US Census Bureau data
+            Source: FRED, US Census Bureau
           </p>
         </div>
 
