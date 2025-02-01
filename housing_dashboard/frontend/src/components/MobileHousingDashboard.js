@@ -441,6 +441,7 @@ const MobileHousingDashboard = () => {
 
   return (
     <div className="min-h-screen bg-white text-gray-800">
+      <Analytics />
       <Header />
       <div className="p-4 md:max-w-6xl md:mx-auto md:px-8 relative">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
