@@ -410,10 +410,7 @@ const MobileHousingDashboard = () => {
       return (
         <div className="bg-white p-4 shadow-lg border border-gray-100 rounded-lg">
           <p className="font-semibold text-gray-800 mb-2">
-            {date.toLocaleDateString('en-US', { 
-              year: 'numeric',
-              month: 'long'
-            })}
+            {date.getFullYear()}
           </p>
           <p className="text-gray-600">
             <span className="font-medium">{value.toFixed(1)}%</span> of income
