@@ -276,6 +276,7 @@ const MobileHousingDashboard = () => {
   const [locations, setLocations] = useState([]);
   const [outlineColor, setOutlineColor] = useState('#492e90');
   const [showDropdown, setShowDropdown] = useState(false);
+  const [rankingsYear, setRankingsYear] = useState(currentYear);
 
   useEffect(() => {
     const loadData = async () => {
@@ -331,20 +332,29 @@ const MobileHousingDashboard = () => {
     location.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const latestRatios = data.reduce((acc, curr) => {
-    if (!acc[curr.location] || curr.date > acc[curr.location].date) {
-      acc[curr.location] = { ratio: curr.ratio, date: curr.date };
-    }
-    return acc;
-  }, {});
-
-  const locationsWithRatios = Object.entries(latestRatios).map(([location, { ratio }]) => ({
-    location,
-    ratio,
-  }));
-
-  const mostAffordable = [...locationsWithRatios].sort((a, b) => a.ratio - b.ratio).slice(0, 10);
-  const mostUnaffordable = [...locationsWithRatios].sort((a, b) => b.ratio - a.ratio).slice(0, 10);
+  const availableRankingYears = [...new Set(data.map(item => 
+    new Date(item.date).getFullYear()
+  ))].sort((a, b) => b - a);
+  
+  const getYearRankings = (year) => {
+    const yearData = data.filter(item => new Date(item.date).getFullYear() === year);
+    const yearRatios = yearData.reduce((acc, curr) => {
+      acc[curr.location] = { ratio: curr.ratio };
+      return acc;
+    }, {});
+  
+    const locationsWithRatios = Object.entries(yearRatios).map(([location, { ratio }]) => ({
+      location,
+      ratio,
+    }));
+  
+    return {
+      mostAffordable: [...locationsWithRatios].sort((a, b) => a.ratio - b.ratio).slice(0, 10),
+      mostUnaffordable: [...locationsWithRatios].sort((a, b) => b.ratio - a.ratio).slice(0, 10)
+    };
+  };
+  
+  const { mostAffordable, mostUnaffordable } = getYearRankings(rankingsYear);
 
   const distributionData = data.map(item => ({
     ...item,
@@ -648,12 +658,23 @@ const MobileHousingDashboard = () => {
         <div className="mt-12 mb-12 border-t border-b border-gray-200 py-8">
           <div className="max-w-5xl mx-auto px-4">
             <p className="text-xl md:text-xl text-gray-600 leading-relaxed font-serif text-center">
-              Here are the metros where your money goes further (yes, there might be a cornfield involved)... and the ones where you'll need to win the lottery first.
+              In {rankingsYear}, here are the metros where your money goes further (yes, there might be a cornfield involved)... and the ones where you'll need to win the lottery first.
             </p>
           </div>
         </div>
-
+        
         <div className="mt-8">
+          <div className="flex justify-end mb-6">
+            <select 
+              value={rankingsYear}
+              onChange={(e) => setRankingsYear(Number(e.target.value))}
+              className="p-2 border rounded-lg bg-white shadow-sm text-gray-700 min-w-[120px]"
+            >
+              {availableRankingYears.map(year => (
+                <option key={year} value={year}>{year}</option>
+              ))}
+            </select>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-100 rounded-xl p-6">
               <div className="flex justify-between items-center mb-4">
