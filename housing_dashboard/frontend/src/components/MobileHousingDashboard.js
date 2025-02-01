@@ -3,6 +3,7 @@ import Papa from 'papaparse';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Cell, Bar, ReferenceLine } from 'recharts';
 import { Search, MapPin, DollarSign, Home, X } from 'lucide-react';
 import _ from 'lodash';
+import { Analytics } from "@vercel/analytics/react"
 
 const AffordabilityDistribution = ({ data }) => {
   // Group data by year and location to get the latest data point for each location in each year
