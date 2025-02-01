@@ -353,7 +353,14 @@ const MobileHousingDashboard = () => {
     };
   };
   
-  const [rankingsYear, setRankingsYear] = useState(availableRankingYears[0] || new Date().getFullYear());
+  const [rankingsYear, setRankingsYear] = useState(null);
+
+  useEffect(() => {
+    if (availableRankingYears.length > 0 && !rankingsYear) {
+      setRankingsYear(availableRankingYears[0]);
+    }
+  }, [availableRankingYears, rankingsYear]);
+  
   const { mostAffordable, mostUnaffordable } = getYearRankings(rankingsYear);
 
   const distributionData = data.map(item => ({
