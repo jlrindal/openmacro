@@ -4,8 +4,6 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { Search, MapPin, DollarSign, Home, X } from 'lucide-react';
 import _ from 'lodash';
 
-const [rankingsYear, setRankingsYear] = useState(currentYear);
-
 const AffordabilityDistribution = ({ data }) => {
   // Group data by year and location to get the latest data point for each location in each year
   const yearlyData = data.reduce((acc, curr) => {
@@ -205,13 +203,6 @@ function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    if (data.length > 0) {
-      const maxYear = Math.max(...data.map(item => new Date(item.date).getFullYear()));
-      setRankingsYear(maxYear);
-    }
-  }, [data]);
-
-  useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
       setIsScrolled(scrollPosition > 50);
@@ -285,8 +276,6 @@ const MobileHousingDashboard = () => {
   const [locations, setLocations] = useState([]);
   const [outlineColor, setOutlineColor] = useState('#492e90');
   const [showDropdown, setShowDropdown] = useState(false);
-  const [rankingsYear, setRankingsYear] = useState(new Date().getFullYear());
-
 
   useEffect(() => {
     const loadData = async () => {
@@ -364,6 +353,7 @@ const MobileHousingDashboard = () => {
     };
   };
   
+  const [rankingsYear, setRankingsYear] = useState(availableRankingYears[0] || new Date().getFullYear());
   const { mostAffordable, mostUnaffordable } = getYearRankings(rankingsYear);
 
   const distributionData = data.map(item => ({
@@ -517,7 +507,7 @@ const MobileHousingDashboard = () => {
             </div>
 
             <div className="bg-gray-100 rounded-xl p-6 flex flex-col items-center text-center">
-                            <Home size={48} className="mb-4 text-gray-600" />
+              <Home size={48} className="mb-4 text-gray-600" />
               <div>
                 <h3 className="text-lg font-semibold mb-2">{currentYear} Median List Price</h3>
                 <p className="text-4xl md:text-3xl">
@@ -734,4 +724,3 @@ const MobileHousingDashboard = () => {
 };
 
 export default MobileHousingDashboard;
-              
