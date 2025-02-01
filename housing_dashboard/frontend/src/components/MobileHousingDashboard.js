@@ -4,6 +4,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { Search, MapPin, DollarSign, Home, X } from 'lucide-react';
 import _ from 'lodash';
 
+const [rankingsYear, setRankingsYear] = useState(currentYear);
+
 const AffordabilityDistribution = ({ data }) => {
   // Group data by year and location to get the latest data point for each location in each year
   const yearlyData = data.reduce((acc, curr) => {
@@ -203,6 +205,13 @@ function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
+    if (data.length > 0) {
+      const maxYear = Math.max(...data.map(item => new Date(item.date).getFullYear()));
+      setRankingsYear(maxYear);
+    }
+  }, [data]);
+
+  useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
       setIsScrolled(scrollPosition > 50);
@@ -276,6 +285,8 @@ const MobileHousingDashboard = () => {
   const [locations, setLocations] = useState([]);
   const [outlineColor, setOutlineColor] = useState('#492e90');
   const [showDropdown, setShowDropdown] = useState(false);
+  const [rankingsYear, setRankingsYear] = useState(new Date().getFullYear());
+
 
   useEffect(() => {
     const loadData = async () => {
@@ -406,8 +417,6 @@ const MobileHousingDashboard = () => {
   const currentYear = latestDataPoint
     ? new Date(latestDataPoint.date).getFullYear()
     : new Date().getFullYear();
-
-    const [rankingsYear, setRankingsYear] = useState(currentYear);
 
   const currentMedianHHI = latestDataPoint?.median_hhi || 0;
   const currentListingPrice = latestDataPoint?.median_price || 0;
