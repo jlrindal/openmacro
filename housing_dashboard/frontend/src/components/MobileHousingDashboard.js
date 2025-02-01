@@ -5,6 +5,7 @@ import { Search, MapPin, DollarSign, Home, X } from 'lucide-react';
 import _ from 'lodash';
 
 const AffordabilityDistribution = ({ data }) => {
+  // Group data by year and location to get the latest data point for each location in each year
   const yearlyData = data.reduce((acc, curr) => {
     const year = curr.year;
     if (!acc[year]) {
@@ -16,6 +17,7 @@ const AffordabilityDistribution = ({ data }) => {
     return acc;
   }, {});
 
+  // Convert the grouped data back to array format for each year
   const processedData = Object.entries(yearlyData).map(([year, locations]) => 
     Object.values(locations).map(item => ({
       ...item,
@@ -35,6 +37,7 @@ const AffordabilityDistribution = ({ data }) => {
   const filteredData = data.filter(item => item.year === selectedYear);
   const allRatios = filteredData.map(item => item.ratio);
   
+  // Histogram calculations
   const bins = 30;
   const minRatio = allRatios.length ? Math.floor(Math.min(...allRatios)) : 0;
   const maxRatio = allRatios.length ? Math.ceil(Math.max(...allRatios)) : 30;
@@ -216,7 +219,7 @@ function Header() {
       }`}>
         <img 
           src="/quantnomics.png"
-          alt="Quantnomics Housing Affordability Analysis"
+          alt="Quantnomics Header"
           className="w-full h-full object-contain"
         />
         <div className={`w-full h-px bg-gray-200 transition-all duration-300 ${
@@ -225,6 +228,7 @@ function Header() {
       </div>
       
       <div className="text-center py-8 px-4">
+        <p className="text-base md:text-base text-gray-500 mb-4"></p>
         <h1 className="text-5xl md:text-7xl text-gray-800 font-serif whitespace-nowrap">
           Can <span className="font-extrabold italic">YOU</span> Afford It?
         </h1>
@@ -232,6 +236,7 @@ function Header() {
           Housing Costs by City
         </h2>
 
+        {/* Author and LinkedIn section */}
         <div className="mt-8 mb-1">
           <div className="flex items-center justify-center gap-4">
             <p className="text-base text-gray-600">Jeremy Rindal</p>
@@ -249,6 +254,7 @@ function Header() {
           </div>
         </div>
         
+        {/* Fixed  blurb section */}
         <div className="pt-8 pt-4">
           <div className="max-w-5xl mx-auto px-4">
             <div className="border-t border-b border-gray-200 py-6">
@@ -335,18 +341,18 @@ const MobileHousingDashboard = () => {
       acc[curr.location] = { ratio: curr.ratio };
       return acc;
     }, {});
-
+  
     const locationsWithRatios = Object.entries(yearRatios).map(([location, { ratio }]) => ({
       location,
       ratio,
     }));
-
+  
     return {
       mostAffordable: [...locationsWithRatios].sort((a, b) => a.ratio - b.ratio).slice(0, 10),
       mostUnaffordable: [...locationsWithRatios].sort((a, b) => b.ratio - a.ratio).slice(0, 10)
     };
   };
-
+  
   const [rankingsYear, setRankingsYear] = useState(null);
 
   useEffect(() => {
@@ -354,6 +360,8 @@ const MobileHousingDashboard = () => {
       setRankingsYear(availableRankingYears[0]);
     }
   }, [availableRankingYears, rankingsYear]);
+  
+  const { mostAffordable, mostUnaffordable } = getYearRankings(rankingsYear);
 
   const distributionData = data.map(item => ({
     ...item,
@@ -432,23 +440,6 @@ const MobileHousingDashboard = () => {
 
   return (
     <div className="min-h-screen bg-white text-gray-800">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Dataset",
-            "name": "Quantnomics Housing Affordability Data",
-            "description": "Comprehensive housing affordability metrics and analysis across US metropolitan areas",
-            "keywords": "housing affordability, real estate trends, mortgage rates, income ratios",
-            "publisher": {
-              "@type": "Organization",
-              "name": "Quantnomics"
-            }
-          })
-        }}
-      />
-
       <Header />
       <div className="p-4 md:max-w-6xl md:mx-auto md:px-8 relative">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
