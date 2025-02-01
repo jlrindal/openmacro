@@ -237,7 +237,7 @@ function Header() {
         </h2>
 
         {/* Author and LinkedIn section */}
-        <div className="mt-8 mb-2">
+        <div className="mt-8 mb-1">
           <div className="flex items-center justify-center gap-4">
             <p className="text-base text-gray-600">Jeremy Rindal</p>
             <a 
