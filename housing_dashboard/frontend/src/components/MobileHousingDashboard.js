@@ -612,7 +612,7 @@ const MobileHousingDashboard = () => {
                   fontFamily: 'system-ui',
                   fontWeight: 500,
                   dx: -30,
-                  dy: 120
+                  dy: 60
                 }}
                 domain={affordabilityRange}
                 tickCount={6}
