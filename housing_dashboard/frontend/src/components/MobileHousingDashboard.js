@@ -608,11 +608,11 @@ const MobileHousingDashboard = () => {
                   angle: -90,
                   position: 'insideLeft',
                   fill: '#1f2937',
-                  fontSize: 13,
+                  fontSize: 12,
                   fontFamily: 'system-ui',
                   fontWeight: 500,
-                  dx: -30,
-                  dy: 60
+                  dx: -15,
+                  dy: 120
                 }}
                 domain={affordabilityRange}
                 tickCount={6}
