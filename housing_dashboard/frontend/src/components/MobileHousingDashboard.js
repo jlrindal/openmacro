@@ -569,7 +569,7 @@ const MobileHousingDashboard = () => {
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={filteredData}
-              margin={{ left: 5, right: 50, top: 20, bottom: 20 }}
+              margin={{ left: 2.5, right: 40, top: 20, bottom: 20 }}
             >
               <CartesianGrid 
                 strokeDasharray="2 2" 
@@ -601,7 +601,7 @@ const MobileHousingDashboard = () => {
                   fontSize: 12,
                   fontFamily: 'system-ui',
                   fontWeight: 500,
-                  dx: -10
+                  dx: -7.5
                 }}
                 label={{
                   value: 'Share of Monthly Income (%)',
@@ -632,7 +632,7 @@ const MobileHousingDashboard = () => {
                         style: {
                             fill: '#6B7280',
                             fontStyle: 'italic',
-                            fontSize: 12,
+                            fontSize: 10,
                         }
                     }}
                 />  
