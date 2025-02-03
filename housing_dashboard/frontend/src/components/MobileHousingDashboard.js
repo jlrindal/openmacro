@@ -111,42 +111,61 @@ const AffordabilityDistribution = ({ data }) => {
             </select>
           </div>
 
-          <div className="h-[500px] md:h-[600px] p-8 pb-4">
+         <div className="h-[500px] md:h-[600px] p-8 pb-4">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={histogramData}
-                margin={{ left: 80, right: 50, top: 40, bottom: 20 }}
+                margin={{ 
+                  left: window.innerWidth < 768 ? 30 : 80, 
+                  right: window.innerWidth < 768 ? 30 : 50, 
+                  top: window.innerWidth < 768 ? 20 : 40, 
+                  bottom: window.innerWidth < 768 ? 120 : 20 
+                }}
+                layout={window.innerWidth < 768 ? "vertical" : "horizontal"}
               >
                 <CartesianGrid 
                   strokeDasharray="2 2" 
                   stroke="#e5e7eb" 
-                  vertical={false}
+                  horizontal={window.innerWidth < 768}
+                  vertical={window.innerWidth >= 768}
                   strokeWidth={1}
                 />
                 <XAxis
-                  dataKey="label"
+                  dataKey={window.innerWidth < 768 ? "count" : "label"}
+                  type={window.innerWidth < 768 ? "number" : "category"}
                   stroke="#374151"
                   tick={{ 
                     fill: '#1f2937', 
                     fontSize: 12,
                     fontFamily: 'system-ui',
-                    fontWeight: 500 
+                    fontWeight: 500
                   }}
-                  interval={2}
+                  interval={window.innerWidth < 768 ? 0 : 2}
                   padding={{ left: 0, right: 0 }}
                   axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
                   tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+                  label={window.innerWidth < 768 ? {
+                    value: 'Number of Metro Areas',
+                    position: 'insideBottom',
+                    fill: '#1f2937',
+                    fontSize: 13,
+                    fontFamily: 'system-ui',
+                    fontWeight: 500,
+                    offset: -10
+                  } : undefined}
                 />
                 <YAxis
+                  dataKey={window.innerWidth < 768 ? "label" : "count"}
+                  type={window.innerWidth < 768 ? "category" : "number"}
                   stroke="#374151"
                   tick={{ 
                     fill: '#1f2937', 
                     fontSize: 12,
                     fontFamily: 'system-ui',
                     fontWeight: 500,
-                    dx: -10
+                    dx: window.innerWidth < 768 ? -5 : -10
                   }}
-                  label={{
+                  label={window.innerWidth >= 768 ? {
                     value: 'Number of Metro Areas',
                     angle: -90,
                     position: 'insideLeft',
@@ -156,14 +175,15 @@ const AffordabilityDistribution = ({ data }) => {
                     fontWeight: 500,
                     dx: -50,
                     dy: 120
-                  }}
+                  } : undefined}
                   axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
                   tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+                  interval={0}
                 />
                 <Tooltip content={<CustomTooltip />} />
                 <Bar
                   dataKey="count"
-                  radius={[4, 4, 0, 0]}
+                  radius={window.innerWidth < 768 ? [0, 4, 4, 0] : [4, 4, 0, 0]}
                 >
                   {histogramData.map((entry, index) => (
                     <Cell 
