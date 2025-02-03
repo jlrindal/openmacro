@@ -178,7 +178,7 @@ const AffordabilityDistribution = ({ data }) => {
                   } : undefined}
                   axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
                   tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
-                  interval={0}
+                  interval={window.innerWidth < 768 ? 2 : 0}
                 />
                 <Tooltip content={<CustomTooltip />} />
                 <Bar
