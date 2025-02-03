@@ -569,7 +569,7 @@ const MobileHousingDashboard = () => {
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={filteredData}
-              margin={{ left: 50, right: 30, top: 40, bottom: 60 }}
+              margin={{ left: 30, right: 50, top: 20, bottom: 20 }}
             >
               <CartesianGrid 
                 strokeDasharray="2 2" 
