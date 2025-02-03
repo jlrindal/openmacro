@@ -229,7 +229,7 @@ function Header() {
       
       <div className="text-center py-8 px-4">
         <p className="text-base md:text-base text-gray-500 mb-4"></p>
-        <h1 className="text-3xl md:text-7xl text-gray-800 font-serif whitespace-nowrap">
+        <h1 className="text-5xl md:text-7xl text-gray-800 font-serif whitespace-nowrap">
           Can <span className="font-extrabold italic">YOU</span> Afford It?
         </h1>
         <h2 className="text-5xl md:text-7xl text-gray-800 font-serif mt-4">
@@ -565,33 +565,35 @@ const MobileHousingDashboard = () => {
           </p>
         )}
 
-        <div className="h-[400px] md:h-[600px] p-4 md:p-8 pb-4">
+        <div className="mt-8 w-full mx-auto max-w-6xl h-[500px] md:h-[600px] bg-white p-8 rounded-lg border border-gray-100 shadow-sm">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={histogramData}
-              margin={{ left: 40, right: 20, top: 20, bottom: 60, ...window.innerWidth > 768 ? { left: 80, right: 50, top: 40, bottom: 20 } : {} }}
-              layout={window.innerWidth <= 768 ? "vertical" : "horizontal"}
+            <LineChart
+              data={filteredData}
+              margin={{ left: 80, right: 50, top: 40, bottom: 60 }}
             >
-              {/* Update CartesianGrid for vertical layout */}
               <CartesianGrid 
                 strokeDasharray="2 2" 
                 stroke="#e5e7eb" 
-                horizontal={window.innerWidth <= 768}
-                vertical={window.innerWidth > 768}
+                vertical={false}
                 strokeWidth={1}
               />
-              {/* Swap XAxis and YAxis for mobile */}
-              {window.innerWidth <= 768 ? (
-                <>
-                  <XAxis type="number" />
-                  <YAxis dataKey="label" type="category" />
-                </>
-              ) : (
-                <>
-                  <XAxis dataKey="label" type="category" />
-                  <YAxis type="number" />
-                </>
-              )}
+              <XAxis
+                dataKey="date"
+                stroke="#374151"
+                tick={{ 
+                  fill: '#1f2937', 
+                  fontSize: 12,
+                  fontFamily: 'system-ui',
+                  fontWeight: 500 
+                }}
+                tickFormatter={(value) => {
+                  const date = new Date(value);
+                  return date.getFullYear();
+                }}
+                padding={{ left: 0, right: 0 }}
+                axisLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+                tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+              />
               <YAxis
                 stroke="#374151"
                 tick={{ 
