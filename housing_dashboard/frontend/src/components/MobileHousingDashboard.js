@@ -569,7 +569,7 @@ const MobileHousingDashboard = () => {
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={filteredData}
-              margin={{ left: 10, right: 50, top: 20, bottom: 20 }}
+              margin={{ left: 5, right: 50, top: 20, bottom: 20 }}
             >
               <CartesianGrid 
                 strokeDasharray="2 2" 
@@ -611,7 +611,7 @@ const MobileHousingDashboard = () => {
                   fontSize: 12,
                   fontFamily: 'system-ui',
                   fontWeight: 500,
-                  dx: -5,
+                  dx: -2.5,
                   dy: 120
                 }}
                 domain={affordabilityRange}
