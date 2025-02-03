@@ -611,7 +611,7 @@ const MobileHousingDashboard = () => {
                   fontSize: 12,
                   fontFamily: 'system-ui',
                   fontWeight: 500,
-                  dx: -15,
+                  dx: -5,
                   dy: 120
                 }}
                 domain={affordabilityRange}
