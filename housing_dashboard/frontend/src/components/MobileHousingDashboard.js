@@ -304,9 +304,12 @@ const MobileHousingDashboard = () => {
         const text = await response.text();
 
         const parsedResult = Papa.parse(text, {
+          delimiter: ",",
+          quoteChar: '"',
+          escapeChar: '\\',
           header: true,
-          dynamicTyping: true,
           skipEmptyLines: true,
+          dynamicTyping: true
         });
 
         if (parsedResult.errors.length) {
