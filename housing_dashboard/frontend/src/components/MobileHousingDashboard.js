@@ -4,6 +4,29 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { Search, MapPin, DollarSign, Home, X } from 'lucide-react';
 import _ from 'lodash';
 
+const PopUpModal = ({ onClose }) => {
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+        <img 
+          src="/quantnomics.png" 
+          alt="Quantnomics Header" 
+          className="w-full h-16 object-contain mb-4"
+        />
+        <p className="text-center text-gray-700 text-lg">
+          Pardon our dust! We're working on something awesome.
+        </p>
+        <button 
+          onClick={onClose}
+          className="mt-6 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const AffordabilityDistribution = ({ data }) => {
   // Group data by year and location to get the latest data point for each location in each year
   const yearlyData = data.reduce((acc, curr) => {
@@ -306,6 +329,7 @@ const MobileHousingDashboard = () => {
   const [locations, setLocations] = useState([]);
   const [outlineColor, setOutlineColor] = useState('#492e90');
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showPopUp, setShowPopUp] = useState(true); // Add this line
 
   useEffect(() => {
     const loadData = async () => {
@@ -475,6 +499,10 @@ const MobileHousingDashboard = () => {
 
   return (
     <div className="min-h-screen bg-white text-gray-800">
+      {/* Pop-up modal */}
+      {showPopUp && <PopUpModal onClose={() => setShowPopUp(false)} />}
+      {/* Header */}
+      <Header />
       <Header />
       <div className="p-4 md:max-w-6xl md:mx-auto md:px-8 relative">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
