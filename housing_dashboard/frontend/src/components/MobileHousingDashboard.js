@@ -72,14 +72,24 @@ const AffordabilityDistribution = ({ data }) => {
 
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
-      const data = payload[0].payload;
+      const owningRatio = payload.find(p => p.dataKey === 'ratio')?.value;
+      const rentingRatio = payload.find(p => p.dataKey === 'rent_ratio')?.value;
+      const date = new Date(payload[0].payload.date);
       return (
         <div className="bg-white p-4 shadow-lg border border-gray-100 rounded-lg">
-          <p className="text-gray-600">
-            <span className="font-medium">{data.count}</span> metro areas with{' '}
-            <span className="font-medium">{data.binStart.toFixed(1)}% - {data.binEnd.toFixed(1)}%</span>
-            {' '}ratio
+          <p className="font-semibold text-gray-800 mb-2">
+            {date.getFullYear()}
           </p>
+          {owningRatio !== undefined && (
+            <p className="text-gray-600">
+              <span className="font-medium">{owningRatio.toFixed(1)}%</span> of income (Owning)
+            </p>
+          )}
+          {rentingRatio !== undefined && (
+            <p className="text-gray-600">
+              <span className="font-medium">{rentingRatio.toFixed(1)}%</span> of income (Renting)
+            </p>
+          )}
         </div>
       );
     }
@@ -325,6 +335,8 @@ const MobileHousingDashboard = () => {
             median_price: parseFloat(row.median_price || 0),
             monthly_payment: parseFloat(row.monthly_payment || 0),
             median_hhi: parseFloat(row.median_hhi || 0),
+            median_rent: parseFloat(row.median_rent || 0),
+            rent_ratio: ((parseFloat(row.median_rent || 0) * 12) / parseFloat(row.median_hhi || 0)) * 100 // New ratio for renting
           }))
           .sort((a, b) => a.date - b.date);
 
@@ -645,21 +657,21 @@ const MobileHousingDashboard = () => {
               />
               <Tooltip content={<CustomTooltip />} />
                 
-                <ReferenceLine 
-                    y={parseFloat(averageRatio)} 
-                    stroke="#6B7280" 
-                    strokeDasharray="3 3"
-                    label={{
-                        value: `Average (${averageRatio}%)`,
-                        position: 'right',
-                        style: {
-                            fill: '#6B7280',
-                            fontStyle: 'italic',
-                            fontSize: 10,
-                        }
-                    }}
-                />  
-                <Line
+              <ReferenceLine 
+                y={parseFloat(averageRatio)} 
+                stroke="#6B7280" 
+                strokeDasharray="3 3"
+                label={{
+                  value: `Average (${averageRatio}%)`,
+                  position: 'right',
+                  style: {
+                    fill: '#6B7280',
+                    fontStyle: 'italic',
+                    fontSize: 10,
+                  }
+                }}
+              />  
+              <Line
                 type="monotone"
                 dataKey="ratio"
                 stroke={getLineColor()}
@@ -671,6 +683,21 @@ const MobileHousingDashboard = () => {
                   stroke: '#fff',
                   strokeWidth: 2
                 }}
+                name="Owning"
+              />
+              <Line
+                type="monotone"
+                dataKey="rent_ratio"
+                stroke="#8884d8" // You can choose a different color for the renting line
+                strokeWidth={3}
+                dot={false}
+                activeDot={{ 
+                  r: 5, 
+                  fill: "#8884d8",
+                  stroke: '#fff',
+                  strokeWidth: 2
+                }}
+                name="Renting"
               />
             </LineChart>
           </ResponsiveContainer>
