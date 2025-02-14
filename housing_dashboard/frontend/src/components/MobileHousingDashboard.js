@@ -95,10 +95,14 @@ const AffordabilityDistribution = ({ data }) => {
 
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
+      const data = payload[0].payload;
       return (
         <div className="bg-white p-4 shadow-lg border border-gray-100 rounded-lg">
+          <p className="text-gray-600 mb-2">
+            Income to Home Price Ratio: {data.label}
+          </p>
           <p className="text-gray-600">
-            <span className="font-medium">{payload[0].value}</span> metro areas
+            <span className="font-medium">{data.count}</span> metro areas
           </p>
         </div>
       );
@@ -465,29 +469,34 @@ const MobileHousingDashboard = () => {
   const currentListingPrice = latestDataPoint?.median_price || 0;
 
   const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-      const owningRatio = payload.find(p => p.dataKey === 'ratio')?.value;
-      const rentingRatio = payload.find(p => p.dataKey === 'rent_ratio')?.value;
+    if (!active || !payload || !payload.length || !payload[0].payload) return null;
+    
+    try {
       const date = new Date(payload[0].payload.date);
+      const owningData = payload.find(p => p.dataKey === 'ratio');
+      const rentingData = payload.find(p => p.dataKey === 'rent_ratio');
+      
       return (
         <div className="bg-white p-4 shadow-lg border border-gray-100 rounded-lg">
           <p className="font-semibold text-gray-800 mb-2">
             {date.getFullYear()}
           </p>
-          {owningRatio !== undefined && (
+          {owningData?.value !== undefined && !isNaN(owningData.value) && (
             <p className="text-gray-600">
-              <span className="font-medium">{owningRatio.toFixed(1)}%</span> of income (Owning)
+              <span className="font-medium">{Number(owningData.value).toFixed(1)}%</span> of income (Owning)
             </p>
           )}
-          {rentingRatio !== undefined && (
+          {rentingData?.value !== undefined && !isNaN(rentingData.value) && (
             <p className="text-gray-600">
-              <span className="font-medium">{rentingRatio.toFixed(1)}%</span> of income (Renting)
+              <span className="font-medium">{Number(rentingData.value).toFixed(1)}%</span> of income (Renting)
             </p>
           )}
         </div>
       );
+    } catch (error) {
+      console.error('Error in tooltip:', error);
+      return null;
     }
-    return null;
   };
 
   return (
