@@ -631,7 +631,7 @@ const MobileHousingDashboard = () => {
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={filteredData}
-              margin={{ left: 0, right: 40, top: 10, bottom: 15 }}
+              margin={{ left: 0, right: 40, top: 20, bottom: 15 }}  {/* Increased top margin for legend */}
             >
               <CartesianGrid 
                 strokeDasharray="2 2" 
@@ -683,7 +683,19 @@ const MobileHousingDashboard = () => {
                 tickLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
               />
               <Tooltip content={<CustomTooltip />} />
-                
+              <Legend 
+                verticalAlign="top" 
+                height={36}
+                iconType="plainline"
+                iconSize={16}
+                wrapperStyle={{
+                  paddingBottom: '10px',
+                  fontFamily: 'system-ui',
+                  fontSize: '12px',
+                  fontWeight: 500
+                }}
+              />
+                  
               <ReferenceLine 
                 y={parseFloat(averageRatio)} 
                 stroke="#6B7280" 
@@ -715,7 +727,7 @@ const MobileHousingDashboard = () => {
               <Line
                 type="monotone"
                 dataKey="rent_ratio"
-                stroke="#8884d8" // You can choose a different color for the renting line
+                stroke="#8884d8"
                 strokeWidth={3}
                 dot={false}
                 activeDot={{ 
