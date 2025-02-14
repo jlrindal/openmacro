@@ -95,24 +95,11 @@ const AffordabilityDistribution = ({ data }) => {
 
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
-      const owningRatio = payload.find(p => p.dataKey === 'ratio')?.value;
-      const rentingRatio = payload.find(p => p.dataKey === 'rent_ratio')?.value;
-      const date = new Date(payload[0].payload.date);
       return (
         <div className="bg-white p-4 shadow-lg border border-gray-100 rounded-lg">
-          <p className="font-semibold text-gray-800 mb-2">
-            {date.getFullYear()}
+          <p className="text-gray-600">
+            <span className="font-medium">{payload[0].value}</span> metro areas
           </p>
-          {owningRatio !== undefined && (
-            <p className="text-gray-600">
-              <span className="font-medium">{owningRatio.toFixed(1)}%</span> of income (Owning)
-            </p>
-          )}
-          {rentingRatio !== undefined && (
-            <p className="text-gray-600">
-              <span className="font-medium">{rentingRatio.toFixed(1)}%</span> of income (Renting)
-            </p>
-          )}
         </div>
       );
     }
@@ -479,18 +466,24 @@ const MobileHousingDashboard = () => {
 
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
-      const value = payload[0].value;
-      if (value === null) return null;
-      
+      const owningRatio = payload.find(p => p.dataKey === 'ratio')?.value;
+      const rentingRatio = payload.find(p => p.dataKey === 'rent_ratio')?.value;
       const date = new Date(payload[0].payload.date);
       return (
         <div className="bg-white p-4 shadow-lg border border-gray-100 rounded-lg">
           <p className="font-semibold text-gray-800 mb-2">
             {date.getFullYear()}
           </p>
-          <p className="text-gray-600">
-            <span className="font-medium">{value.toFixed(1)}%</span> of income
-          </p>
+          {owningRatio !== undefined && (
+            <p className="text-gray-600">
+              <span className="font-medium">{owningRatio.toFixed(1)}%</span> of income (Owning)
+            </p>
+          )}
+          {rentingRatio !== undefined && (
+            <p className="text-gray-600">
+              <span className="font-medium">{rentingRatio.toFixed(1)}%</span> of income (Renting)
+            </p>
+          )}
         </div>
       );
     }
