@@ -629,11 +629,11 @@ const MobileHousingDashboard = () => {
           </p>
         )}
 
-        <div className="mt-8 w-full mx-auto max-w-6xl h-[500px] md:h-[600px] bg-white p-8 rounded-lg border border-gray-100 shadow-sm">
+        <div className="mt-8 w-full mx-auto max-w-6xl h-96 md:h-screen/2 bg-white p-8 rounded-lg border border-gray-100 shadow-sm">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={filteredData}
-              margin={{ left: 0, right: 40, top: 20, bottom: 15 }}  {/* Increased top margin for legend */}
+              margin={{ left: 0, right: 40, top: 20, bottom: 15 }}
             >
               <CartesianGrid 
                 strokeDasharray="2 2" 
@@ -697,7 +697,7 @@ const MobileHousingDashboard = () => {
                   fontWeight: 500
                 }}
               />
-                  
+                      
               <ReferenceLine 
                 y={parseFloat(averageRatio)} 
                 stroke="#6B7280" 
