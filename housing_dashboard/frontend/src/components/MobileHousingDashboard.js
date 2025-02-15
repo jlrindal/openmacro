@@ -629,7 +629,7 @@ const MobileHousingDashboard = () => {
           </p>
         )}
 
-        <div className="mt-8 w-full mx-auto max-w-6xl h-96 md:h-96 bg-white p-8 rounded-lg border border-gray-100 shadow-sm">
+        <div className="mt-8 w-full mx-auto max-w-6xl h-screen/1.5 md:h-screen/1.5 bg-white p-8 rounded-lg border border-gray-100 shadow-sm">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={filteredData}
